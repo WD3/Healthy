@@ -1,0 +1,589 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/tabhost"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#70CD18"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <TabWidget
+            android:id="@android:id/tabs"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true" >
+        </TabWidget>
+
+        <FrameLayout
+            android:id="@android:id/tabcontent"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+
+            <LinearLayout
+                android:id="@+id/count"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#363636"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="12dp"
+                        android:text="计步"
+                        android:textColor="#ffffff"
+                        android:textSize="26sp" />
+                </LinearLayout>
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" >
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginTop="30dp"
+                            android:background="@drawable/layout_brown" >
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="15dp"
+                                android:layout_marginTop="10dp"
+                                android:text="步数："
+                                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                            <TextView
+                                android:id="@+id/tv_steps"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="right"
+                                android:layout_marginRight="20dp"
+                                android:padding="12dp"
+                                android:text="0"
+                                android:textAppearance="?android:attr/textAppearanceLarge"
+                                android:textSize="58sp" />
+                        </FrameLayout>
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="70dp"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginTop="15dp"
+                            android:background="@drawable/layout_brown" >
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="15dp"
+                                android:layout_marginTop="10dp"
+                                android:text="距离/米："
+                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:id="@+id/tv_distance"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="bottom|right"
+                                android:layout_marginBottom="10dp"
+                                android:layout_marginRight="20dp"
+                                android:text="0"
+                                android:textSize="25sp" />
+                        </FrameLayout>
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="70dp"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginTop="10dp"
+                            android:background="@drawable/layout_brown" >
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="15dp"
+                                android:layout_marginTop="10dp"
+                                android:text="卡路里/千卡："
+                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:id="@+id/tv_calorie"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="bottom|right"
+                                android:layout_marginBottom="10dp"
+                                android:layout_marginRight="20dp"
+                                android:text="0"
+                                android:textSize="25sp" />
+                        </FrameLayout>
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="70dp"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginTop="10dp"
+                            android:background="@drawable/layout_brown" >
+
+                            <TextView
+                                android:id="@+id/tv_tarsteps"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="15dp"
+                                android:layout_marginTop="10dp"
+                                android:text="目标：5000步"
+                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                android:textSize="15sp" />
+
+                            <TextView
+                                android:id="@+id/tv_progress"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="bottom|right"
+                                android:layout_marginBottom="10dp"
+                                android:layout_marginRight="20dp"
+                                android:text="0%"
+                                android:textSize="25sp" />
+                        </FrameLayout>
+                    </LinearLayout>
+                </ScrollView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/weight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#363636"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="12dp"
+                        android:text="体重"
+                        android:textColor="#ffffff"
+                        android:textSize="26sp" />
+                </LinearLayout>
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" >
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginTop="30dp"
+                            android:background="@drawable/layout_brown" >
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="15dp"
+                                android:layout_marginTop="28dp"
+                                android:text="当前体重/kg："
+                                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginBottom="30dp"
+                                android:layout_marginTop="58dp" >
+
+                                <kankan.wheel.widget.WheelView
+                                    android:id="@+id/passw_1"
+                                    android:layout_width="46dp"
+                                    android:layout_height="108dp"
+                                    android:layout_marginLeft="5dp" />
+
+                                <kankan.wheel.widget.WheelView
+                                    android:id="@+id/passw_2"
+                                    android:layout_width="46dp"
+                                    android:layout_height="108dp" />
+
+                                <TextView
+                                    android:id="@+id/passw_2"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="5dp"
+                                    android:layout_marginTop="15dp"
+                                    android:text="."
+                                    android:textSize="50sp" />
+
+                                <kankan.wheel.widget.WheelView
+                                    android:id="@+id/passw_3"
+                                    android:layout_width="46dp"
+                                    android:layout_height="108dp"
+                                    android:layout_marginLeft="5dp" />
+                            </LinearLayout>
+                        </FrameLayout>
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="70dp"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginTop="15dp"
+                            android:background="@drawable/layout_brown" >
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="15dp"
+                                android:layout_marginTop="10dp"
+                                android:text="BMI指数："
+                                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                            <TextView
+                                android:id="@+id/tv_bmi"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="bottom|right"
+                                android:layout_marginBottom="10dp"
+                                android:layout_marginRight="20dp"
+                                android:text="0"
+                                android:textSize="25sp" />
+                        </FrameLayout>
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="70dp"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginTop="10dp"
+                            android:background="@drawable/layout_brown" >
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="15dp"
+                                android:layout_marginTop="10dp"
+                                android:text="目标体重："
+                                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                            <TextView
+                                android:id="@+id/targetWeight"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="bottom|right"
+                                android:layout_marginBottom="10dp"
+                                android:layout_marginRight="20dp"
+                                android:text="0"
+                                android:textSize="25sp" />
+                        </FrameLayout>
+                    </LinearLayout>
+                </ScrollView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/history"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="50dp"
+                android:orientation="vertical" >
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#363636" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:padding="12dp"
+                        android:text="历史"
+                        android:textColor="#ffffff"
+                        android:textSize="26sp" />
+
+                    <ImageView
+                        android:id="@+id/myswitch"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="24dp"
+                        android:src="@drawable/icon_switch" />
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/chart"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical" >
+                </LinearLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <LinearLayout
+                        android:id="@+id/chart"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="30dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/layout_brown"
+                        android:orientation="vertical" >
+                    </LinearLayout>
+                </FrameLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/more"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#363636"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="12dp"
+                        android:text="设置"
+                        android:textColor="#ffffff"
+                        android:textSize="26sp" />
+                </LinearLayout>
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" >
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginTop="20dp" >
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="80dp"
+                                android:background="@drawable/layout_brown"
+                                android:orientation="vertical" >
+
+                                <FrameLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="40dp"
+                                    android:background="@drawable/background_grey" >
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="left"
+                                        android:layout_marginLeft="15dp"
+                                        android:layout_marginTop="10dp"
+                                        android:text="计步器序列号："
+                                        android:textAppearance="?android:attr/textAppearanceMedium"
+                                        android:textColor="#FFFFFF" />
+
+                                    <TextView
+                                        android:id="@+id/counterId"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="right"
+                                        android:layout_marginRight="15dp"
+                                        android:layout_marginTop="15dp" />
+                                </FrameLayout>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="left"
+                                    android:layout_marginLeft="15dp"
+                                    android:layout_marginTop="5dp"
+                                    android:text="体重计序列号："
+                                    android:textAppearance="?android:attr/textAppearanceMedium"
+                                    android:textColor="#2F2F2F" />
+
+                                <TextView
+                                    android:id="@+id/scaleId"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_gravity="right"
+                                    android:layout_marginRight="15dp"
+                                    android:background="@drawable/button_transparent" />
+                            </LinearLayout>
+                        </FrameLayout>
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginTop="20dp" >
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="78dp"
+                                android:background="@drawable/layout_brown"
+                                android:orientation="vertical" >
+
+                                <FrameLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="38dp"
+                                    android:background="@drawable/background_grey" >
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="15dp"
+                                        android:layout_marginTop="10dp"
+                                        android:text="目标体重/kg"
+                                        android:textAppearance="?android:attr/textAppearanceMedium"
+                                        android:textColor="#FFFFFF" />
+                                </FrameLayout>
+
+                                <EditText
+                                    android:id="@+id/et_tarweight"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginLeft="15dp"
+                                    android:layout_marginRight="15dp"
+                                    android:background="@drawable/button_transparent"
+                                    android:ems="10"
+                                    android:inputType="numberDecimal" />
+                            </LinearLayout>
+                        </FrameLayout>
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp" >
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="78dp"
+                                android:background="@drawable/layout_brown"
+                                android:orientation="vertical" >
+
+                                <FrameLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="38dp"
+                                    android:background="@drawable/background_grey" >
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="15dp"
+                                        android:layout_marginTop="10dp"
+                                        android:text="目标步数/步"
+                                        android:textAppearance="?android:attr/textAppearanceMedium"
+                                        android:textColor="#FFFFFF" />
+                                </FrameLayout>
+
+                                <EditText
+                                    android:id="@+id/et_tarsteps"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginLeft="15dp"
+                                    android:layout_marginRight="15dp"
+                                    android:background="@drawable/button_transparent"
+                                    android:ems="10"
+                                    android:inputType="numberDecimal" />
+                            </LinearLayout>
+                        </FrameLayout>
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp" >
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="78dp"
+                                android:background="@drawable/layout_brown"
+                                android:orientation="vertical" >
+
+                                <FrameLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="38dp"
+                                    android:background="@drawable/background_grey" >
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="15dp"
+                                        android:layout_marginTop="10dp"
+                                        android:text="步距/cm"
+                                        android:textAppearance="?android:attr/textAppearanceMedium"
+                                        android:textColor="#FFFFFF" />
+                                </FrameLayout>
+
+                                <EditText
+                                    android:id="@+id/et_steplength"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_marginLeft="15dp"
+                                    android:layout_marginRight="15dp"
+                                    android:background="@drawable/button_transparent"
+                                    android:ems="10"
+                                    android:inputType="numberDecimal" />
+                            </LinearLayout>
+                        </FrameLayout>
+
+                        <ImageButton
+                            android:id="@+id/exit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="20dp"
+                            android:background="#70CD18"
+                            android:src="@drawable/exit" />
+                    </LinearLayout>
+                </ScrollView>
+            </LinearLayout>
+        </FrameLayout>
+    </RelativeLayout>
+
+</TabHost>
