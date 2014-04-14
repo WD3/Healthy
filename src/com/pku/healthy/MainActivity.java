@@ -16,11 +16,13 @@ import android.os.Message;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.animation.AnticipateOvershootInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TabHost;
@@ -29,7 +31,7 @@ import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends TabActivity {
+public class MainActivity extends TabActivity implements OnClickListener{
 	private TabHost tabHost;
 	private LinearLayout layout;
 	static TextView tvSteps;
@@ -40,14 +42,19 @@ public class MainActivity extends TabActivity {
 	private EditText et_tarSteps;
 	private EditText et_tarWeight;
 	private EditText et_stepLength;
-	private ImageButton button;
+	private ImageButton bt_exit;
+	private ImageView iv_mySwitch;
 	static String tarSteps;
 	static String stepLength;
 	static String tarWeight;
 	
 	static SharedPreferences sp;	
-	private CounterHistory counterHistory;
+	static SharedPreferences hourStepSp;
+	private DayStepsHistory dayStepsHistory;
+	private HourStepsHistory hourStepsHistory;
 	private SetActivity setActivity;
+	private boolean hourSteps;
+	private boolean daySteps;
 	
 	
     @Override
@@ -76,22 +83,16 @@ public class MainActivity extends TabActivity {
 		et_tarWeight = (EditText)findViewById(R.id.et_tarweight);
 		et_stepLength = (EditText)findViewById(R.id.et_steplength);
 		tv_tarSteps = (TextView)findViewById(R.id.tv_tarsteps);
-		button = (ImageButton)findViewById(R.id.exit);
-		button.setOnClickListener(new View.OnClickListener(){
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				System.out.println("点击退出");
-				MainActivity.this.stopService(new Intent(MainActivity.this, PlayService.class));
-				
-			}
-			
-		});
+		iv_mySwitch = (ImageView)findViewById(R.id.myswitch);
+		iv_mySwitch.setOnClickListener(this);
+		bt_exit = (ImageButton)findViewById(R.id.exit);
+		bt_exit.setOnClickListener(this);
 		
 		
 		sp = PreferenceManager.getDefaultSharedPreferences(this);
-		counterHistory = new CounterHistory(layout,sp,this);
+		hourStepSp = PreferenceManager.getDefaultSharedPreferences(this);
+		dayStepsHistory = new DayStepsHistory(layout,sp,this);
+		hourStepsHistory = new HourStepsHistory(layout,hourStepSp,this);
 		setActivity = new SetActivity(sp,et_tarWeight,et_tarSteps,et_stepLength);
 		
 		
@@ -105,7 +106,8 @@ public class MainActivity extends TabActivity {
 				    initWheel(R.id.passw_3);
 				}else if(tabId.equals("history")){
 					setActivity.save();
-					counterHistory.init();
+					dayStepsHistory.init();
+					daySteps =  true;
 				}else if(tabId.equals("count")){
 					setActivity.save();
 					tv_tarSteps.setText("目标："+et_tarSteps.getText()+"步");
@@ -194,6 +196,27 @@ public class MainActivity extends TabActivity {
 				}
 			}
 	};
+
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		switch(v.getId()){
+		case R.id.exit:
+			MainActivity.this.stopService(new Intent(MainActivity.this, PlayService.class));
+			break;		
+		case R.id.myswitch:
+			if(hourSteps){
+				hourSteps = false;
+				dayStepsHistory.init();
+				daySteps = true;
+			}else if(daySteps){
+				daySteps = false;
+				hourStepsHistory.init();
+				hourSteps = true;
+			}
+			break;
+		}
+	}
 	
-    
 }

@@ -14,19 +14,16 @@ public class AlarmReceiver extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		// TODO Auto-generated method stub
 		if(intent.getAction().equals("AlarmReceiver")){
-			SimpleDateFormat format = new SimpleDateFormat("MM-dd");
-			String date = format.format(new Date());
-			MainActivity.sp.edit().putString(date, StepCounter.tvsteps).commit();
-			StepCounter.steps = 0;
-			StepCounter.tvsteps = "0";
-			StepCounter.distance = "0";
-			StepCounter.calorie = "0";
-			StepCounter.progress = "0%";
-			MainActivity.SendMessage(MainActivity.handler, 1);
-			System.out.println("º∆≤Ω«Â¡„");
-			alarmThread = new AlarmThread(context);
-			new Thread(alarmThread).start();			
+			Date date = new Date();
+			int hour = date.getHours();
+			int orgSteps = MainActivity.hourStepSp.getInt(hour+"fhoursteps", 0);
+			int curSteps = Integer.parseInt(StepCounter.tvsteps) - orgSteps;
+			MainActivity.hourStepSp.edit().putInt(hour+"hoursteps", curSteps)
+			.putInt(hour+1+"fhoursteps", Integer.parseInt(StepCounter.tvsteps)).commit();
+			if(hour == 23){				
+				alarmThread = new AlarmThread(context);
+				new Thread(alarmThread).start();	
+			}			
 		}		
 	}
-
 }

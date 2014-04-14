@@ -11,14 +11,18 @@ public class CountSet {
 		String orgDistance = MainActivity.sp.getString("距离", "0");
 		String orgCalorie = MainActivity.sp.getString("卡路里", "0");
 		String orgProgress = MainActivity.sp.getString("进度", "0%");
+		Date date = new Date();
 		SimpleDateFormat format = new SimpleDateFormat("MM-dd");
-		String curDate = format.format(new Date());
+		String curDate = format.format(date);
 		if(curDate.equals(orgDate)){
 			StepCounter.tvsteps = orgSteps;
 			StepCounter.distance = orgDistance;
 			StepCounter.calorie = orgCalorie;
 			StepCounter.progress = orgProgress;
 			MainActivity.SendMessage(MainActivity.handler, 1);
+			int a = MainActivity.hourStepSp.getInt(date.getHours()+"hoursteps", 0);
+			if(a == 0)
+				MainActivity.hourStepSp.edit().putInt(date.getHours()+"fhoursteps", Integer.parseInt(StepCounter.tvsteps)).commit();
 		}
 		else {
 			StepCounter.steps = 0;
@@ -27,6 +31,7 @@ public class CountSet {
 			StepCounter.calorie = "0";
 			StepCounter.progress = "0%";
 			MainActivity.SendMessage(MainActivity.handler, 1);
+			MainActivity.hourStepSp.edit().clear().commit();
 		}
 			
 	}

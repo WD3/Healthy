@@ -14,7 +14,7 @@ public class MyPowerManager {
 	public MyPowerManager(Context context){
 		this.context = context;
 		powerManager = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
-		wakeLock = powerManager.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP|PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "SimpleTimer");		
+		wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "SimpleTimer");		
 	}
 	public void acquireWakeLock(){
 		if(wakeLock != null){

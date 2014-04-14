@@ -336,7 +336,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="24dp"
-                        android:src="@drawable/icon_switch" />
+                        android:src="@drawable/preference_switch_item" />
                 </RelativeLayout>
 
                 <LinearLayout
@@ -579,7 +579,7 @@
                             android:layout_gravity="center"
                             android:layout_marginTop="20dp"
                             android:background="#70CD18"
-                            android:src="@drawable/exit" />
+                            android:src="@drawable/preference_exit_item" />
                     </LinearLayout>
                 </ScrollView>
             </LinearLayout>

@@ -12,7 +12,6 @@ public class PlayService extends Service{
 	private SensorManager mSensorManager;
 	private Sensor sLinearAcceleration;
 	private MyPowerManager myPowerManager;
-	private SaveSteps mSaveSteps;
 	private MyAlarm myAlarm;
 
 	@Override
@@ -29,8 +28,6 @@ public class PlayService extends Service{
 	    mSensorManager.registerListener(stepCounter, sLinearAcceleration, SensorManager.SENSOR_DELAY_FASTEST);
 	    myPowerManager.acquireWakeLock();
 	    stepCounter.start();
-	    mSaveSteps = new SaveSteps();
-		mSaveSteps.save();
 		CountSet.countSet();
 		myAlarm = new MyAlarm(this);
 		myAlarm.setAlarm();
@@ -40,9 +37,8 @@ public class PlayService extends Service{
 		super.onDestroy();
     	mSensorManager.unregisterListener(stepCounter);
     	myPowerManager.releaseWakeLock();
-    	mSaveSteps.cancleTimer();
     	myAlarm.cancleAlarm();
-    	mSaveSteps.saveSteps();
+    	SaveSteps.saveSteps();
     	stepCounter.stop();
     	System.exit(0);
 	}

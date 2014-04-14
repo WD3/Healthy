@@ -39,7 +39,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-public class CounterHistory{
+public class DayStepsHistory{
 
 	private LinearLayout layout;
 	private SharedPreferences sp;
@@ -57,7 +57,7 @@ public class CounterHistory{
 	private GraphicalView mchartView_week;
 	private String[] xdate = new String[7];
 	
-	public CounterHistory(LinearLayout layout,SharedPreferences sp,Context context){
+	public DayStepsHistory(LinearLayout layout,SharedPreferences sp,Context context){
 		this.layout = layout;
 		this.sp = sp;
 		this.context = context;

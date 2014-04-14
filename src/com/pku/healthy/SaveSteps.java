@@ -2,42 +2,24 @@ package com.pku.healthy;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import android.content.SharedPreferences;
 
 public class SaveSteps {
-	private final int INTERVAL = 60000;
-	private Timer timer;
-
-	// 每半个小时存一次计步数据
-	public void save() {
-		TimerTask task = new TimerTask() {
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				saveSteps();
-			}
-		};
-		timer = new Timer();
-		timer.schedule(task, 500, INTERVAL);
-	}
 
 	public static void saveSteps() {
+		Date date = new Date();
 		SimpleDateFormat format = new SimpleDateFormat("MM-dd");
-		String date = format.format(new Date());
-
-		MainActivity.sp.edit().putString("日期", date)
-				.putString(date, StepCounter.tvsteps)
+		String sDate = format.format(date);
+		int hour = date.getHours();
+		int orgSteps = MainActivity.hourStepSp.getInt(hour+"fhoursteps", 0);
+		int curSteps = Integer.parseInt(StepCounter.tvsteps) - orgSteps;
+		MainActivity.hourStepSp.edit().putInt(hour+"hoursteps", curSteps).commit();
+		MainActivity.sp.edit().putString("日期", sDate)
+				.putString(sDate, StepCounter.tvsteps)
 				.putString("步数", StepCounter.tvsteps)
 				.putString("距离", StepCounter.distance)
 				.putString("卡路里", StepCounter.calorie)
 				.putString("进度", StepCounter.progress).commit();
-	}
-
-	public void cancleTimer() {
-		if (timer != null)
-			timer.cancel();
 	}
 }
