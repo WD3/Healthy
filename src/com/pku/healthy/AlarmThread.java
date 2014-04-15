@@ -8,6 +8,7 @@ import android.content.Context;
 public class AlarmThread implements Runnable{
 	private Context context;
 	private MyAlarm myAlarm;
+	private final int SLEEP = 120000;  //23点59分数据清零后，休眠两分钟更改日期
 	
 	public AlarmThread(Context context){
 		this.context = context;
@@ -27,7 +28,7 @@ public class AlarmThread implements Runnable{
 		StepCounter.progress = "0%";
 		MainActivity.SendMessage(MainActivity.handler, 1);
 		try {
-			Thread.sleep(5000);
+			Thread.sleep(SLEEP);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

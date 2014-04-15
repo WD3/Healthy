@@ -257,6 +257,7 @@
                             android:layout_marginLeft="20dp"
                             android:layout_marginRight="20dp"
                             android:layout_marginTop="15dp"
+                            android:id="@+id/bmilayout"
                             android:background="@drawable/layout_brown" >
 
                             <TextView
@@ -295,7 +296,7 @@
                                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
                             <TextView
-                                android:id="@+id/targetWeight"
+                                android:id="@+id/tv_tarWeight"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="bottom|right"
@@ -555,13 +556,13 @@
                                         android:layout_height="wrap_content"
                                         android:layout_marginLeft="15dp"
                                         android:layout_marginTop="10dp"
-                                        android:text="步距/cm"
+                                        android:text="身高/cm"
                                         android:textAppearance="?android:attr/textAppearanceMedium"
                                         android:textColor="#FFFFFF" />
                                 </FrameLayout>
 
                                 <EditText
-                                    android:id="@+id/et_steplength"
+                                    android:id="@+id/et_height"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:layout_marginLeft="15dp"

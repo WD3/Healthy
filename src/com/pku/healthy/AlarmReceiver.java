@@ -14,6 +14,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		// TODO Auto-generated method stub
 		if(intent.getAction().equals("AlarmReceiver")){
+			System.out.println(" ’µΩπ„≤•");
 			Date date = new Date();
 			int hour = date.getHours();
 			int orgSteps = MainActivity.hourStepSp.getInt(hour+"fhoursteps", 0);

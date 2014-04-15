@@ -22,9 +22,9 @@ public class MyAlarm {
 	public void setAlarm() {
 		Calendar calendar = Calendar.getInstance();
 		Date date = new Date();
-		date.setHours(date.getHours());
+		System.out.println("nowdate"+date);
 		date.setMinutes(59);
-		date.setSeconds(57);
+		date.setSeconds(0);
 		System.out.println("date"+date);
 		calendar.setTime(date);			  
 

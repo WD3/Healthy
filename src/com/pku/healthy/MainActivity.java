@@ -21,6 +21,7 @@ import android.view.Window;
 import android.view.animation.AnticipateOvershootInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -34,19 +35,23 @@ import android.widget.Toast;
 public class MainActivity extends TabActivity implements OnClickListener{
 	private TabHost tabHost;
 	private LinearLayout layout;
+	private FrameLayout bmilayout;
 	static TextView tvSteps;
 	static TextView calorie;
 	static TextView progress;
 	static TextView distance;
 	private TextView tv_tarSteps;
+	private TextView tv_tarWeight;
+	private TextView tv_BMI;
 	private EditText et_tarSteps;
 	private EditText et_tarWeight;
-	private EditText et_stepLength;
+	private EditText et_height;
 	private ImageButton bt_exit;
 	private ImageView iv_mySwitch;
 	static String tarSteps;
-	static String stepLength;
+	static String height;
 	static String tarWeight;
+	private String newWeight;
 	
 	static SharedPreferences sp;	
 	static SharedPreferences hourStepSp;
@@ -55,6 +60,8 @@ public class MainActivity extends TabActivity implements OnClickListener{
 	private SetActivity setActivity;
 	private boolean hourSteps;
 	private boolean daySteps;
+	
+    private boolean wheelScrolled = false;    // Wheel scrolled flag
 	
 	
     @Override
@@ -79,10 +86,13 @@ public class MainActivity extends TabActivity implements OnClickListener{
 		calorie = (TextView)findViewById(R.id.tv_calorie) ;
 		progress = (TextView)findViewById(R.id.tv_progress) ;
 		layout = (LinearLayout)findViewById(R.id.chart);
+		bmilayout = (FrameLayout)findViewById(R.id.bmilayout);
 		et_tarSteps = (EditText)findViewById(R.id.et_tarsteps);
 		et_tarWeight = (EditText)findViewById(R.id.et_tarweight);
-		et_stepLength = (EditText)findViewById(R.id.et_steplength);
+		et_height = (EditText)findViewById(R.id.et_height);
 		tv_tarSteps = (TextView)findViewById(R.id.tv_tarsteps);
+		tv_tarWeight = (TextView)findViewById(R.id.tv_tarWeight);
+		tv_BMI = (TextView)findViewById(R.id.tv_bmi);
 		iv_mySwitch = (ImageView)findViewById(R.id.myswitch);
 		iv_mySwitch.setOnClickListener(this);
 		bt_exit = (ImageButton)findViewById(R.id.exit);
@@ -93,7 +103,7 @@ public class MainActivity extends TabActivity implements OnClickListener{
 		hourStepSp = PreferenceManager.getDefaultSharedPreferences(this);
 		dayStepsHistory = new DayStepsHistory(layout,sp,this);
 		hourStepsHistory = new HourStepsHistory(layout,hourStepSp,this);
-		setActivity = new SetActivity(sp,et_tarWeight,et_tarSteps,et_stepLength);
+		setActivity = new SetActivity(sp,et_tarWeight,et_tarSteps,et_height);
 		
 		
 		//标签切换处理，用setOnTabChangedListener	
@@ -104,6 +114,7 @@ public class MainActivity extends TabActivity implements OnClickListener{
 					initWheel(R.id.passw_1);
 				    initWheel(R.id.passw_2);
 				    initWheel(R.id.passw_3);
+				    tv_tarWeight.setText(et_tarWeight.getText().toString());
 				}else if(tabId.equals("history")){
 					setActivity.save();
 					dayStepsHistory.init();
@@ -113,9 +124,7 @@ public class MainActivity extends TabActivity implements OnClickListener{
 					tv_tarSteps.setText("目标："+et_tarSteps.getText()+"步");
 				}else if(tabId.equals("more")){
 					setActivity.read();
-				}
-					
-				
+				}									
 			}
 		});
 			
@@ -127,11 +136,9 @@ public class MainActivity extends TabActivity implements OnClickListener{
 		progress.setText(StepCounter.progress);
 		tv_tarSteps.setText("目标："+et_tarSteps.getText()+"步");	
 		tarSteps = ""+et_tarSteps.getText();
-		stepLength = ""+et_stepLength.getText();
+		height = ""+et_height.getText();
 		tarWeight = ""+et_tarWeight.getText();
     }
- // Wheel scrolled flag
-    private boolean wheelScrolled = false;
     
     // Wheel scrolled listener
     OnWheelScrollListener scrolledListener = new OnWheelScrollListener() {
@@ -140,6 +147,23 @@ public class MainActivity extends TabActivity implements OnClickListener{
         }
         public void onScrollingFinished(WheelView wheel) {
             wheelScrolled = false;
+            int a = getWheel(R.id.passw_1).getCurrentItem();
+            int b = getWheel(R.id.passw_2).getCurrentItem();
+            int c = getWheel(R.id.passw_3).getCurrentItem();
+            newWeight = ""+a+b+"."+c;
+            double height = Double.parseDouble(et_height.getText().toString());
+            double bmi = Double.parseDouble(newWeight)/(height*height/10000);
+            tv_BMI.setText(String.format("%.2f", bmi));
+            if(bmi<18.5||bmi>32)
+            	bmilayout.setBackgroundColor(Color.parseColor("#FF0000"));
+            else if(bmi>=18.5&&bmi<=24.99)
+            	bmilayout.setBackgroundColor(Color.parseColor("#CCFF33"));
+            else if(bmi>=20&&bmi<=25)
+            	bmilayout.setBackgroundColor(Color.parseColor("#66FF00"));
+            else if(bmi>25&&bmi<=28)
+            	bmilayout.setBackgroundColor(Color.parseColor("#FFFF66"));
+            else if(bmi>28&&bmi<=32)
+            	bmilayout.setBackgroundColor(Color.parseColor("#FF9900"));            
         }
     };
     

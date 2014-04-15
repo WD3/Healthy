@@ -312,7 +312,7 @@ public class StepCounter implements SensorEventListener {
 				//实际步数应为极大值数*2  
 				
 				tvsteps = ""+steps * 2;
-				distance = String.format("%.1f", steps * 2 * Double.parseDouble(MainActivity.stepLength) / 100);
+				distance = String.format("%.1f", steps * 2 * Double.parseDouble(MainActivity.height)*0.4 / 100);
 				calorie = String.format("%.2f", steps * 1.23);
 				progress = String.format("%.3f", steps * 200 / Double.parseDouble(MainActivity.tarSteps)) + "%";
 				MainActivity.SendMessage(MainActivity.handler, 1);				

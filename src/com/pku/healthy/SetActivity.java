@@ -20,12 +20,13 @@ public class SetActivity {
 	public void save() {
 		sp.edit().putString("目标体重", et1.getText().toString())
 				.putString("目标步数", et2.getText().toString())
-				.putString("步距", et3.getText().toString()).commit();
+				.putString("身高", et3.getText().toString()).commit();
+		MainActivity.height = et3.getText().toString();
 	}
 
 	public void read() {
 		et1.setText(sp.getString("目标体重", "65"));
 		et2.setText(sp.getString("目标步数", "5000"));
-		et3.setText(sp.getString("步距", "60"));
+		et3.setText(sp.getString("身高", "175"));
 	}
 }
