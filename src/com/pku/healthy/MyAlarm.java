@@ -23,8 +23,8 @@ public class MyAlarm {
 		Calendar calendar = Calendar.getInstance();
 		Date date = new Date();
 		System.out.println("nowdate"+date);
-		date.setMinutes(59);
-		date.setSeconds(0);
+		date.setMinutes(54);
+		date.setSeconds(55);
 		System.out.println("date"+date);
 		calendar.setTime(date);			  
 

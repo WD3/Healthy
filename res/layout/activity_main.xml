@@ -226,16 +226,17 @@
                                 <kankan.wheel.widget.WheelView
                                     android:id="@+id/passw_1"
                                     android:layout_width="46dp"
-                                    android:layout_height="108dp"
-                                    android:layout_marginLeft="5dp" />
-
+                                    android:layout_height="108dp"/>
                                 <kankan.wheel.widget.WheelView
                                     android:id="@+id/passw_2"
                                     android:layout_width="46dp"
                                     android:layout_height="108dp" />
+                                <kankan.wheel.widget.WheelView
+                                    android:id="@+id/passw_3"
+                                    android:layout_width="46dp"
+                                    android:layout_height="108dp" />
 
                                 <TextView
-                                    android:id="@+id/passw_2"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="5dp"
@@ -244,7 +245,7 @@
                                     android:textSize="50sp" />
 
                                 <kankan.wheel.widget.WheelView
-                                    android:id="@+id/passw_3"
+                                    android:id="@+id/passw_4"
                                     android:layout_width="46dp"
                                     android:layout_height="108dp"
                                     android:layout_marginLeft="5dp" />

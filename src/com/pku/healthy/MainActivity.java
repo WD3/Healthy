@@ -51,15 +51,22 @@ public class MainActivity extends TabActivity implements OnClickListener{
 	static String tarSteps;
 	static String height;
 	static String tarWeight;
-	private String newWeight;
+	static String newWeight = "0";
+	private boolean hourSteps;
+	private boolean daySteps;
+	private boolean dayWeight;
 	
 	static SharedPreferences sp;	
 	static SharedPreferences hourStepSp;
+	private SharedPreferences weightSp;
+	private SensorManager sensorManager;
+	
 	private DayStepsHistory dayStepsHistory;
 	private HourStepsHistory hourStepsHistory;
+	private DayWeightHistory dayWeightHistory;
 	private SetActivity setActivity;
-	private boolean hourSteps;
-	private boolean daySteps;
+	private ShakeListener shakeListener;
+
 	
     private boolean wheelScrolled = false;    // Wheel scrolled flag
 	
@@ -101,10 +108,14 @@ public class MainActivity extends TabActivity implements OnClickListener{
 		
 		sp = PreferenceManager.getDefaultSharedPreferences(this);
 		hourStepSp = PreferenceManager.getDefaultSharedPreferences(this);
+		weightSp = PreferenceManager.getDefaultSharedPreferences(this);
+		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+
 		dayStepsHistory = new DayStepsHistory(layout,sp,this);
 		hourStepsHistory = new HourStepsHistory(layout,hourStepSp,this);
+		dayWeightHistory = new DayWeightHistory(layout,weightSp,this);
 		setActivity = new SetActivity(sp,et_tarWeight,et_tarSteps,et_height);
-		
+		shakeListener = new ShakeListener(this,weightSp);
 		
 		//标签切换处理，用setOnTabChangedListener	
 		tabHost.setOnTabChangedListener(new OnTabChangeListener(){
@@ -114,16 +125,21 @@ public class MainActivity extends TabActivity implements OnClickListener{
 					initWheel(R.id.passw_1);
 				    initWheel(R.id.passw_2);
 				    initWheel(R.id.passw_3);
+				    initWheel(R.id.passw_4);
 				    tv_tarWeight.setText(et_tarWeight.getText().toString());
+				    sensorManager.registerListener(shakeListener,sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),SensorManager.SENSOR_DELAY_GAME);
 				}else if(tabId.equals("history")){
 					setActivity.save();
 					dayStepsHistory.init();
-					daySteps =  true;
+					hourSteps =  true;
+					sensorManager.unregisterListener(shakeListener); 
 				}else if(tabId.equals("count")){
 					setActivity.save();
 					tv_tarSteps.setText("目标："+et_tarSteps.getText()+"步");
+					sensorManager.unregisterListener(shakeListener); 
 				}else if(tabId.equals("more")){
 					setActivity.read();
+					sensorManager.unregisterListener(shakeListener); 
 				}									
 			}
 		});
@@ -150,7 +166,8 @@ public class MainActivity extends TabActivity implements OnClickListener{
             int a = getWheel(R.id.passw_1).getCurrentItem();
             int b = getWheel(R.id.passw_2).getCurrentItem();
             int c = getWheel(R.id.passw_3).getCurrentItem();
-            newWeight = ""+a+b+"."+c;
+            int d = getWheel(R.id.passw_4).getCurrentItem();
+            newWeight = ""+a+b+c+"."+d;
             double height = Double.parseDouble(et_height.getText().toString());
             double bmi = Double.parseDouble(newWeight)/(height*height/10000);
             tv_BMI.setText(String.format("%.2f", bmi));
@@ -197,7 +214,10 @@ public class MainActivity extends TabActivity implements OnClickListener{
     private WheelView getWheel(int id) {
     	return (WheelView) findViewById(id);
     }
-
+    public void onPause(){
+    	super.onPause();
+    	sensorManager.unregisterListener(shakeListener); 
+    }
     public void onDestroy(){
     	super.onDestroy();
     	setActivity.save();
@@ -232,11 +252,18 @@ public class MainActivity extends TabActivity implements OnClickListener{
 		case R.id.myswitch:
 			if(hourSteps){
 				hourSteps = false;
-				dayStepsHistory.init();
+				daySteps = false;
+				hourStepsHistory.init();
+				dayWeight = true;
+			}else if(dayWeight){
+				dayWeight = false;
+				hourSteps = false;
+				dayWeightHistory.init();
 				daySteps = true;
 			}else if(daySteps){
 				daySteps = false;
-				hourStepsHistory.init();
+				dayWeight = false;
+				dayStepsHistory.init();
 				hourSteps = true;
 			}
 			break;

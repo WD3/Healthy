@@ -8,7 +8,7 @@ import android.content.Context;
 public class AlarmThread implements Runnable{
 	private Context context;
 	private MyAlarm myAlarm;
-	private final int SLEEP = 120000;  //23点59分数据清零后，休眠两分钟更改日期
+	private final int SLEEP = 360000;  //23点55分数据清零后，休眠六分钟更改日期
 	
 	public AlarmThread(Context context){
 		this.context = context;

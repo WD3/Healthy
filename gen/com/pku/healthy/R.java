@@ -46,28 +46,29 @@ public final class R {
         public static final int wheel_val=0x7f020015;
     }
     public static final class id {
-        public static final int action_settings=0x7f080017;
-        public static final int bmilayout=0x7f08000a;
-        public static final int chart=0x7f08000f;
+        public static final int action_settings=0x7f080018;
+        public static final int bmilayout=0x7f08000b;
+        public static final int chart=0x7f080010;
         public static final int count=0x7f080000;
-        public static final int counterId=0x7f080011;
-        public static final int et_height=0x7f080015;
-        public static final int et_tarsteps=0x7f080014;
-        public static final int et_tarweight=0x7f080013;
-        public static final int exit=0x7f080016;
-        public static final int history=0x7f08000d;
-        public static final int more=0x7f080010;
-        public static final int myswitch=0x7f08000e;
+        public static final int counterId=0x7f080012;
+        public static final int et_height=0x7f080016;
+        public static final int et_tarsteps=0x7f080015;
+        public static final int et_tarweight=0x7f080014;
+        public static final int exit=0x7f080017;
+        public static final int history=0x7f08000e;
+        public static final int more=0x7f080011;
+        public static final int myswitch=0x7f08000f;
         public static final int passw_1=0x7f080007;
         public static final int passw_2=0x7f080008;
         public static final int passw_3=0x7f080009;
-        public static final int scaleId=0x7f080012;
-        public static final int tv_bmi=0x7f08000b;
+        public static final int passw_4=0x7f08000a;
+        public static final int scaleId=0x7f080013;
+        public static final int tv_bmi=0x7f08000c;
         public static final int tv_calorie=0x7f080003;
         public static final int tv_distance=0x7f080002;
         public static final int tv_progress=0x7f080005;
         public static final int tv_steps=0x7f080001;
-        public static final int tv_tarWeight=0x7f08000c;
+        public static final int tv_tarWeight=0x7f08000d;
         public static final int tv_tarsteps=0x7f080004;
         public static final int weight=0x7f080006;
     }

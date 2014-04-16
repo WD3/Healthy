@@ -11,6 +11,7 @@ import org.achartengine.GraphicalView;
 import org.achartengine.chart.PointStyle;
 import org.achartengine.chart.BarChart.Type;
 import org.achartengine.model.CategorySeries;
+import org.achartengine.model.TimeSeries;
 import org.achartengine.model.XYMultipleSeriesDataset;
 import org.achartengine.model.XYSeries;
 import org.achartengine.renderer.SimpleSeriesRenderer;
@@ -39,78 +40,64 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-public class DayStepsHistory{
+public class DayWeightHistory{
 
 	private LinearLayout layout;
 	private SharedPreferences sp;
 	private Context context;
-	private long oneday = 86400000l;
-	private String firstdate;
-	private String twicedate;
-	private String thirddate;
-	private String fourthdate;
-	private String fifthdate;
-	private String sixthdate;
-	private String seventhdate;
-	private String eighthdate;
-	private GraphicalView mchartView_week;
-	private String[] xdate = new String[7];
+	private int total;
 	
-	public DayStepsHistory(LinearLayout layout,SharedPreferences sp,Context context){
+	private GraphicalView mchartView_week;
+	
+	public DayWeightHistory(LinearLayout layout,SharedPreferences sp,Context context){
 		this.layout = layout;
 		this.sp = sp;
 		this.context = context;
 	}
 	public void init(){			
-		SimpleDateFormat format = new SimpleDateFormat("MM-dd");
-		seventhdate = format.format(System.currentTimeMillis());
-		firstdate = format.format((System.currentTimeMillis()-oneday*6));
-		twicedate = format.format((System.currentTimeMillis()-oneday*5));
-		thirddate = format.format((System.currentTimeMillis()-oneday*4));
-		fourthdate = format.format((System.currentTimeMillis()-oneday*3));
-		fifthdate = format.format((System.currentTimeMillis()-oneday*2));
-		sixthdate = format.format((System.currentTimeMillis()-oneday));
-		String[] date = {firstdate,twicedate,thirddate,fourthdate,fifthdate,sixthdate,seventhdate};
-		for(int i = 0;i<date.length;i++){
-			xdate[i] = date[i];
-		}
-		mchartView_week = ChartFactory.getBarChartView(context, buildDataset(), buildRenderer(), Type.DEFAULT);
-		layout.removeAllViews();
-		layout.addView(mchartView_week, new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT));
+
+		try {
+			mchartView_week = ChartFactory.getTimeChartView(context, buildDataset(), buildRenderer(),"MM-dd HH:mm");
+			layout.removeAllViews();
+			layout.addView(mchartView_week, new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT));
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
 //		if(this.getResources().getConfiguration().orientation ==Configuration.ORIENTATION_PORTRAIT){         //璁剧疆妯睆
 //			   setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 //			}
 	}
 	
-	protected XYMultipleSeriesDataset buildDataset() {
+	protected XYMultipleSeriesDataset buildDataset() throws JSONException {
 		XYMultipleSeriesDataset dataset = new XYMultipleSeriesDataset();
-		double[] yValues = new double[7];
-//		int step6 = Integer.parseInt(sp.getString(seventhdate, "0"));
-//		yValues[6] = (double)step6;
-		yValues[6] = Double.parseDouble(StepCounter.tvsteps);
-		int step5 = Integer.parseInt(sp.getString(sixthdate, "0"));
-		yValues[5] = (double)step5;
-		int step4 = Integer.parseInt(sp.getString(fifthdate, "0"));
-		yValues[4] = (double)step4;
-		int step3 = Integer.parseInt(sp.getString(fourthdate, "0"));
-		yValues[3] = (double)step3;
-		int step2 = Integer.parseInt(sp.getString(thirddate, "0"));
-		yValues[2] = (double)step2;
-		int step1 = Integer.parseInt(sp.getString(twicedate, "0"));
-		yValues[1] = (double)step1;
-		int step0 = Integer.parseInt(sp.getString(firstdate, "0"));
 		
-		CategorySeries series = new CategorySeries("");
-		for (int i = 0; i < 7; i ++){		
-			series.add(yValues[i]);
+		String weightString = sp.getString("weight_json", "[]");
+		JSONArray weightJSONArray = new JSONArray(weightString);
+		total = weightJSONArray.length();
+					
+		Date[] dateValues = new Date[total];
+		double[] doubleValues = new double[total];
+		for (int i = 0; i < total; i ++){
+			JSONObject obj;
+			obj = weightJSONArray.getJSONObject(i);
+			Date date = new Date();
+			date.setTime(obj.getLong("time"));
+			dateValues[i] = date;
+			doubleValues[i] = obj.getDouble("weight");
 		}
-		dataset.addSeries(series.toXYSeries());		
+		TimeSeries series = new TimeSeries("");
+		for (int i = 0; i < total; i ++){		
+			series.add(dateValues[i], doubleValues[i]);
+		}
+		dataset.addSeries(series);		
 		return dataset;
 	}
 	public XYMultipleSeriesRenderer buildRenderer() {
 		XYMultipleSeriesRenderer renderer = new XYMultipleSeriesRenderer();
 	    XYSeriesRenderer r = new XYSeriesRenderer();
 	    r.setColor(Color.parseColor("#505050"));
+	    r.setPointStyle(PointStyle.TRIANGLE);
 	    r.setDisplayChartValues(true);
 	    renderer.addSeriesRenderer(r);
 	    setChartSettings(renderer);
@@ -118,16 +105,16 @@ public class DayStepsHistory{
 	 }
 	private void setChartSettings(XYMultipleSeriesRenderer renderer) {		
 	    renderer.setChartTitle( "" );
-	    renderer.setXTitle( "鏃ユ湡" );
-	    renderer.setYTitle( "姝ユ暟" );
-	    renderer.setXAxisMin(0.5);
-	    renderer.setXAxisMax(7.5);
+	    renderer.setXTitle( "时间(月-日  时:分)" );
+	    renderer.setGridColor(Color.GRAY);
+	    renderer.setYTitle( "体重" );
+//	    renderer.setXAxisMin(0.5);
+//	    renderer.setXAxisMax(7.5);
 	    renderer.setYAxisMin(0);
+	    renderer.setYAxisMax(100);
 	    renderer.setChartValuesTextSize(24);
 	    renderer.setLabelsTextSize(20);
-	    renderer.setYAxisMax(Integer.parseInt(MainActivity.tarSteps,10));
 	    renderer.setMarginsColor(Color.parseColor("#70CD18"));
-	    renderer.setZoomEnabled(false, false);
 	    renderer.setShowGrid(true);
 	    renderer.setFitLegend(true);
 	    renderer.setAxesColor(Color.parseColor("#505050"));
@@ -136,16 +123,15 @@ public class DayStepsHistory{
 //	    renderer.setBackgroundColor(Color.parseColor("#ffaa60"));
 //	    renderer.setApplyBackgroundColor(true);
 //	    renderer.setZoomButtonsVisible(true);
-	    renderer.setZoomEnabled(false);
-	    renderer.setPanEnabled(false, false);
+	    renderer.setZoomEnabled(true);
+	    renderer.setPanEnabled(true, true);
 //	    renderer.setMargins(new int[] { 40, 30, 15, 0 });
-	    renderer.setBarSpacing(0.2f);
 	    renderer.setXLabelsAlign(Align.CENTER);	    
 	    renderer.setXLabelsColor(Color.parseColor("#505050"));
 	    renderer.setYLabelsColor(0, Color.parseColor("#505050"));
-	    for (int i = 0; i < 7; i++) {  
-            renderer.addXTextLabel(i+1,xdate[i]); 
-        }  
-	    renderer.setXLabels(0);
+//	    for (int i = 0; i < 7; i++) {  
+//            renderer.addXTextLabel(i+1,xdate[i]); 
+//        }  
+//	    renderer.setXLabels(0);
 	 }
 }
