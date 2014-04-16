@@ -65,7 +65,8 @@ public class MainActivity extends TabActivity implements OnClickListener{
 	private HourStepsHistory hourStepsHistory;
 	private DayWeightHistory dayWeightHistory;
 	private SetActivity setActivity;
-	private ShakeListener shakeListener;
+	private SaveWeight saveWeight;
+//	private ShakeListenerUtils shakeListenerUtils;
 
 	
     private boolean wheelScrolled = false;    // Wheel scrolled flag
@@ -115,7 +116,8 @@ public class MainActivity extends TabActivity implements OnClickListener{
 		hourStepsHistory = new HourStepsHistory(layout,hourStepSp,this);
 		dayWeightHistory = new DayWeightHistory(layout,weightSp,this);
 		setActivity = new SetActivity(sp,et_tarWeight,et_tarSteps,et_height);
-		shakeListener = new ShakeListener(this,weightSp);
+		saveWeight = new SaveWeight(this,weightSp);
+//		shakeListenerUtils = new ShakeListenerUtils(this,weightSp);
 		
 		//标签切换处理，用setOnTabChangedListener	
 		tabHost.setOnTabChangedListener(new OnTabChangeListener(){
@@ -127,19 +129,23 @@ public class MainActivity extends TabActivity implements OnClickListener{
 				    initWheel(R.id.passw_3);
 				    initWheel(R.id.passw_4);
 				    tv_tarWeight.setText(et_tarWeight.getText().toString());
-				    sensorManager.registerListener(shakeListener,sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),SensorManager.SENSOR_DELAY_GAME);
+				    saveWeight.start();
+//				    sensorManager.registerListener(shakeListenerUtils,sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),SensorManager.SENSOR_DELAY_NORMAL);
 				}else if(tabId.equals("history")){
 					setActivity.save();
 					dayStepsHistory.init();
 					hourSteps =  true;
-					sensorManager.unregisterListener(shakeListener); 
+					saveWeight.stop();
+//					sensorManager.unregisterListener(shakeListenerUtils); 
 				}else if(tabId.equals("count")){
 					setActivity.save();
 					tv_tarSteps.setText("目标："+et_tarSteps.getText()+"步");
-					sensorManager.unregisterListener(shakeListener); 
+					saveWeight.stop();
+//					sensorManager.unregisterListener(shakeListenerUtils); 
 				}else if(tabId.equals("more")){
 					setActivity.read();
-					sensorManager.unregisterListener(shakeListener); 
+					saveWeight.stop();
+//					sensorManager.unregisterListener(shakeListenerUtils); 
 				}									
 			}
 		});
@@ -174,13 +180,13 @@ public class MainActivity extends TabActivity implements OnClickListener{
             if(bmi<18.5||bmi>32)
             	bmilayout.setBackgroundColor(Color.parseColor("#FF0000"));
             else if(bmi>=18.5&&bmi<=24.99)
-            	bmilayout.setBackgroundColor(Color.parseColor("#CCFF33"));
-            else if(bmi>=20&&bmi<=25)
-            	bmilayout.setBackgroundColor(Color.parseColor("#66FF00"));
+            	bmilayout.setBackgroundColor(Color.parseColor("#CCFF33"));            
             else if(bmi>25&&bmi<=28)
             	bmilayout.setBackgroundColor(Color.parseColor("#FFFF66"));
             else if(bmi>28&&bmi<=32)
-            	bmilayout.setBackgroundColor(Color.parseColor("#FF9900"));            
+            	bmilayout.setBackgroundColor(Color.parseColor("#FF9900"));  
+            if(bmi>=20&&bmi<=25)
+            	bmilayout.setBackgroundColor(Color.parseColor("#00CC00"));
         }
     };
     
@@ -214,13 +220,11 @@ public class MainActivity extends TabActivity implements OnClickListener{
     private WheelView getWheel(int id) {
     	return (WheelView) findViewById(id);
     }
-    public void onPause(){
-    	super.onPause();
-    	sensorManager.unregisterListener(shakeListener); 
-    }
+
     public void onDestroy(){
     	super.onDestroy();
     	setActivity.save();
+    	saveWeight.stop();
     }
     public static void SendMessage(Handler handler, int i){
 		Message msg = handler.obtainMessage();

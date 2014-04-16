@@ -1,17 +1,10 @@
 package com.pku.healthy;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.app.Service;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.Vibrator;
 import android.util.Log;
 
 /**
@@ -26,7 +19,8 @@ public class ShakeListener implements SensorEventListener {
 	private SensorManager sensorManager;
 	// 传感器
 	private Sensor sensor;
-	// 上下文
+	// 重力感应监听器
+	private OnShakeListener onShakeListener;
 	private Context context;
 	// 手机上一个位置时重力感应坐标
 	private float lastX;
@@ -34,14 +28,29 @@ public class ShakeListener implements SensorEventListener {
 	private float lastZ;
 	// 上次检测时间
 	private long lastUpdateTime;
-	private Vibrator vibrator;
-	private SharedPreferences sp;
 
 	// 构造器
-	public ShakeListener(Context context,SharedPreferences sp) {
+	public ShakeListener(Context context) {
 		this.context = context;
-		this.sp = sp;
-		vibrator = (Vibrator) context.getSystemService(Service.VIBRATOR_SERVICE);
+		sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+		if (sensorManager != null) 
+			sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);		
+	}
+
+	public void start() {		
+		// 注册
+		if (sensor != null)
+			sensorManager.registerListener(this, sensor,SensorManager.SENSOR_DELAY_GAME);		
+	}
+
+	// 停止检测
+	public void stop() {
+		sensorManager.unregisterListener(this);
+	}
+
+	// 设置重力感应监听器
+	public void setOnShakeListener(OnShakeListener listener) {
+		onShakeListener = listener;
 	}
 
 	// 重力感应器感应获得变化数据
@@ -68,38 +77,21 @@ public class ShakeListener implements SensorEventListener {
 		lastY = y;
 		lastZ = z;
 		// sqrt 返回最近的双近似的平方根
-		double speed = Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ* deltaZ)/ timeInterval * 10000;
+		double speed = Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ
+				* deltaZ)
+				/ timeInterval * 10000;
+		Log.v("thelog", "===========log===================");
 		// 达到速度阀值，发出提示
 		if (speed >= SPEED_SHRESHOLD) {
-			saveWeight();
-			vibrator.vibrate(500);
+			onShakeListener.onShake();
 		}
 	}
 
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
 	}
 
-	private void saveWeight(){
-		JSONArray weightJSONArray;
-		JSONObject newValue = new JSONObject();
-
-		String weightString = sp.getString("weight_json", "[]");
-		try {
-
-			newValue.put("time", System.currentTimeMillis());
-			newValue.put("weight", Double.parseDouble(MainActivity.newWeight));
-
-			weightJSONArray = new JSONArray(weightString);
-			weightJSONArray.put(newValue);
-
-			sp.edit().putString("weight_json", weightJSONArray.toString())
-					.commit();
-			String device = "000000000000";
-			WeightThread weightThread = new WeightThread(MainActivity.newWeight,device);
-			weightThread.start();
-			System.out.println("保存体重成功");
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
+	// 摇晃监听接口
+	public interface OnShakeListener {
+		public void onShake();
 	}
 }

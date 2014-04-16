@@ -155,7 +155,7 @@ public class StepCounter implements SensorEventListener {
 			return;
 		
 		acc = event.values;
-		System.out.println("acc[0]"+acc[0]+"acc[1]"+acc[1]+"acc[2]"+acc[2]);
+//		System.out.println("acc[0]"+acc[0]+"acc[1]"+acc[1]+"acc[2]"+acc[2]);
 		
 		time = System.currentTimeMillis();
 		
