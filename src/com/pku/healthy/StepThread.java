@@ -1,4 +1,5 @@
 package com.pku.healthy;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -7,11 +8,11 @@ import java.net.UnknownHostException;
 import java.util.zip.CRC32;
 
 public class StepThread extends Thread {
-	private int steps;
+	private String stepStr;
 	private String deviceStr;
 	
-	public StepThread(int stepnum, String device) {
-		steps = stepnum;
+	public StepThread(String step, String device) {
+		stepStr = step;
 		deviceStr = device;
 	}
 	
@@ -85,20 +86,25 @@ public class StepThread extends Thread {
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			AlarmReceiver.saveLoseSteps();
+			return;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			AlarmReceiver.saveLoseSteps();
+			return;
 		}
-		byte[] stepData = new byte[24];
+		byte[] stepByte = stepStr.getBytes();
+		int len = stepByte.length;
+		byte[] stepData = new byte[20+len];
 		stepData[0] = 0x14;
 		stepData[1] = 0x44;
 		stepData[3] = 0x18;
 		stepData[12] = authCode[0];
 		stepData[13] = authCode[1];
-		stepData[20] = (byte)(steps>>>24);
-		stepData[21] = (byte)((steps>>>16)&0xff);
-		stepData[22] = (byte)((steps>>>8)&0xff);
-		stepData[23] = (byte)(steps&0xff);
+		for (int i = 0; i < len; i++) {
+			stepData[20+i] = stepByte[i];
+		}
 		CRC32 crc = new CRC32();
 		crc.update(stepData);
 		long crclong = crc.getValue();
@@ -112,10 +118,16 @@ public class StepThread extends Thread {
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			AlarmReceiver.saveLoseSteps();
+			return;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			AlarmReceiver.saveLoseSteps();
+			return;
 		}
+		AlarmReceiver.stepsString = null;
+		MainActivity.sp.edit().putString("steps_lose", null).commit();
 	}
 	
 	private int byte4toInt(byte[] buf){

@@ -20,9 +20,9 @@ public class CountSet {
 			StepCounter.calorie = orgCalorie;
 			StepCounter.progress = orgProgress;
 			MainActivity.SendMessage(MainActivity.handler, 1);
-			int a = MainActivity.hourStepSp.getInt(date.getHours()+"hoursteps", 0);
+			int a = MainActivity.sp.getInt(date.getHours()+"hoursteps", 0);
 			if(a == 0)
-				MainActivity.hourStepSp.edit().putInt(date.getHours()+"fhoursteps", Integer.parseInt(StepCounter.tvsteps)).commit();
+				MainActivity.sp.edit().putInt(date.getHours()+"fhoursteps", Integer.parseInt(StepCounter.tvsteps)).commit();
 		}
 		else {
 			StepCounter.steps = 0;
@@ -31,7 +31,7 @@ public class CountSet {
 			StepCounter.calorie = "0";
 			StepCounter.progress = "0%";
 			MainActivity.SendMessage(MainActivity.handler, 1);
-			MainActivity.hourStepSp.edit().clear().commit();
+			MainActivity.sp.edit().clear().commit();
 		}
 			
 	}

@@ -13,6 +13,7 @@ public class PlayService extends Service{
 	private Sensor sLinearAcceleration;
 	private MyPowerManager myPowerManager;
 	private MyAlarm myAlarm;
+	private NotificationExtend notification;
 
 	@Override
 	public IBinder onBind(Intent arg0) {
@@ -21,6 +22,7 @@ public class PlayService extends Service{
 	}
 	public void onCreate(){
 		super.onCreate();
+		System.out.println("¿ªÆôºóÌ¨");
 		stepCounter = new StepCounter();
 		mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 	    sLinearAcceleration = mSensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
@@ -31,6 +33,7 @@ public class PlayService extends Service{
 		CountSet.countSet();
 		myAlarm = new MyAlarm(this);
 		myAlarm.setAlarm();
+		notification = new NotificationExtend(this);
 	}
 
 	public void onDestroy(){
@@ -38,8 +41,9 @@ public class PlayService extends Service{
     	mSensorManager.unregisterListener(stepCounter);
     	myPowerManager.releaseWakeLock();
     	myAlarm.cancleAlarm();
-    	SaveSteps.saveSteps();
+    	ExitManager.save();
     	stepCounter.stop();
+    	notification.cancel();
     	System.exit(0);
 	}
 }

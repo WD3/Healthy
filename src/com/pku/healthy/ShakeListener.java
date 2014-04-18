@@ -12,7 +12,7 @@ import android.util.Log;
  */
 public class ShakeListener implements SensorEventListener {
 	// 速度阈值，当摇晃速度达到这值后产生作用
-	private static final int SPEED_SHRESHOLD = 3600;
+	private static final int SPEED_SHRESHOLD = 3200;
 	// 两次检测的时间间隔
 	private static final int UPTATE_INTERVAL_TIME = 70;
 	// 传感器管理器
@@ -80,7 +80,7 @@ public class ShakeListener implements SensorEventListener {
 		double speed = Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ
 				* deltaZ)
 				/ timeInterval * 10000;
-		Log.v("thelog", "===========log===================");
+//		Log.v("thelog", "===========log===================");
 		// 达到速度阀值，发出提示
 		if (speed >= SPEED_SHRESHOLD) {
 			onShakeListener.onShake();

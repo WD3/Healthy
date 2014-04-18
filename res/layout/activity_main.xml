@@ -226,11 +226,13 @@
                                 <kankan.wheel.widget.WheelView
                                     android:id="@+id/passw_1"
                                     android:layout_width="46dp"
-                                    android:layout_height="108dp"/>
+                                    android:layout_height="108dp" />
+
                                 <kankan.wheel.widget.WheelView
                                     android:id="@+id/passw_2"
                                     android:layout_width="46dp"
                                     android:layout_height="108dp" />
+
                                 <kankan.wheel.widget.WheelView
                                     android:id="@+id/passw_3"
                                     android:layout_width="46dp"
@@ -253,12 +255,12 @@
                         </FrameLayout>
 
                         <FrameLayout
+                            android:id="@+id/bmilayout"
                             android:layout_width="match_parent"
                             android:layout_height="70dp"
                             android:layout_marginLeft="20dp"
                             android:layout_marginRight="20dp"
                             android:layout_marginTop="15dp"
-                            android:id="@+id/bmilayout"
                             android:background="@drawable/layout_brown" >
 
                             <TextView
@@ -574,14 +576,46 @@
                             </LinearLayout>
                         </FrameLayout>
 
-                        <ImageButton
-                            android:id="@+id/exit"
-                            android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
                             android:layout_marginTop="20dp"
-                            android:background="#70CD18"
-                            android:src="@drawable/preference_exit_item" />
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:orientation="horizontal" >
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_gravity="center" >
+
+                                <ImageButton
+                                    android:id="@+id/lock"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_marginLeft="60dp"                                    
+                                    android:background="#70CD18"
+                                    android:src="@drawable/preference_lock_item" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_gravity="center" >
+
+                                <ImageButton
+                                    android:id="@+id/exit"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_marginLeft="20dp"
+                                    android:background="#70CD18"
+                                    android:src="@drawable/preference_exit_item" />
+                            </LinearLayout>
+                        </LinearLayout>
                     </LinearLayout>
                 </ScrollView>
             </LinearLayout>

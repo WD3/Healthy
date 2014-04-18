@@ -4,7 +4,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.text.SimpleDateFormat;
 import java.util.zip.CRC32;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class WeightThread extends Thread {
 	private String weightStr;
@@ -85,9 +90,13 @@ public class WeightThread extends Thread {
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			SaveWeight.saveLoseWeight();
+			return;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			SaveWeight.saveLoseWeight();
+			return;
 		}
 		byte[] weightByte = weightStr.getBytes();
 		int len = weightByte.length;
@@ -113,10 +122,16 @@ public class WeightThread extends Thread {
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			SaveWeight.saveLoseWeight();
+			return;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			SaveWeight.saveLoseWeight();
+			return;
 		}
+		SaveWeight.weightString = null;
+		MainActivity.sp.edit().putString("weight_lose", null).commit();
 	}
 	
 	private int byte4toInt(byte[] buf){
@@ -127,6 +142,5 @@ public class WeightThread extends Thread {
 		int fourthByte = (0x000000FF & ((int) buf[3]));
 	
 		return ( firstByte << 24 | secondByte << 16 | thirdByte << 8 | fourthByte ) & 0xFFFFFFFF; 
-	}
-	
+	}		
 }

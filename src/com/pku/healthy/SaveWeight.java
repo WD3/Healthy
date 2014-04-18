@@ -1,5 +1,8 @@
 package com.pku.healthy;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,6 +21,9 @@ public class SaveWeight {
 	private SharedPreferences sp;
 	private ShakeListener mShakeListener;
 	private boolean savingFlag;
+	static String weightString;
+	static JSONObject newValue;
+
 
 	public SaveWeight(Context context, SharedPreferences sp) {
 		this.context = context;
@@ -33,8 +39,15 @@ public class SaveWeight {
 			public void onShake() {
 				// TODO Auto-generated method stub
 				if(!savingFlag){
+					saveWeight();
 					SaveWeightThread sWThread = new SaveWeightThread();
 					sWThread.start();
+					weightString = MainActivity.sp.getString("weight_lose", null);
+					if(weightString == null) formatWeight();
+					else saveLoseWeight();
+					System.out.println("weightString"+weightString);
+					WeightThread wThread = new WeightThread(weightString, "000000000000");
+					wThread.start();
 				}
 			}      	
         });
@@ -43,24 +56,55 @@ public class SaveWeight {
 		mShakeListener.stop();
 	}
 	private void saveWeight(){
-		JSONArray weightJSONArray;
-		JSONObject newValue = new JSONObject();
-
-		String weightString = sp.getString("weight_json", "[]");
+		newValue = new JSONObject();
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		String time = format.format(System.currentTimeMillis());
 		try {
-
-			newValue.put("time", System.currentTimeMillis());
-			newValue.put("weight", Double.parseDouble(MainActivity.newWeight));
-
+			newValue.put("time", time);
+			newValue.put("weight", String.valueOf(Double.parseDouble(MainActivity.newWeight)));			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}				
+	}
+	private void formatWeight(){
+		JSONArray weightArray = new JSONArray();
+		weightArray.put(newValue);
+		weightString = weightArray.toString();						
+	}
+	public static void saveLoseWeight(){
+		JSONArray weightJSONArray;
+		weightString = MainActivity.sp.getString("weight_lose", "[]");
+		try {
 			weightJSONArray = new JSONArray(weightString);
 			weightJSONArray.put(newValue);
-
-			sp.edit().putString("weight_json", weightJSONArray.toString())
+			weightString = weightJSONArray.toString();
+			MainActivity.sp.edit().putString("weight_lose", weightString)
 					.commit();
-			System.out.println("保存体重成功");
+			System.out.println("保存上传失败体重成功");
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
+	}
+	private void saveWeightToHistory(){
+		JSONArray weightJSONArray;
+        JSONObject newValue = new JSONObject();
+
+        String weightString = sp.getString("weight_json", "[]");
+        try {
+
+            newValue.put("time", System.currentTimeMillis());
+            newValue.put("weight", Double.parseDouble(MainActivity.newWeight));
+
+            weightJSONArray = new JSONArray(weightString);
+            weightJSONArray.put(newValue);
+
+            sp.edit().putString("weight_json", weightJSONArray.toString())
+                    .commit();
+			System.out.println("保存体重成功");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }		
 	}
 	class SaveWeightThread extends Thread{
 
@@ -68,7 +112,7 @@ public class SaveWeight {
 		public void run() {
 			// TODO Auto-generated method stub
 			savingFlag = true;
-			saveWeight();
+			saveWeightToHistory();
 			vibrator.vibrate(500);
 			mShakeListener.stop();
 			try {
@@ -79,7 +123,7 @@ public class SaveWeight {
 			}
 			mShakeListener.start();
 			savingFlag = false;
-		}
-		
+		}		
 	}
+	
 }

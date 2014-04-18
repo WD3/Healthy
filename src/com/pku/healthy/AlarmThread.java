@@ -21,19 +21,22 @@ public class AlarmThread implements Runnable{
 		SimpleDateFormat format = new SimpleDateFormat("MM-dd");
 		String orgDate = format.format(new Date());
 		MainActivity.sp.edit().putString(orgDate, StepCounter.tvsteps).commit();
+		try {
+			Thread.sleep(SLEEP);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}				
 		StepCounter.steps = 0;
 		StepCounter.tvsteps = "0";
 		StepCounter.distance = "0";
 		StepCounter.calorie = "0";
 		StepCounter.progress = "0%";
 		MainActivity.SendMessage(MainActivity.handler, 1);
-		try {
-			Thread.sleep(SLEEP);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}	
-		MainActivity.hourStepSp.edit().clear().commit();		
+		for(int i = 0;i<24;i++){
+			MainActivity.sp.edit().putInt(i+"hoursteps", 0)
+			.putInt(i+1+"fhoursteps", 0).commit();
+		}
 		String curDate = format.format(new Date());
 		MainActivity.sp.edit().putString("ÈÕÆÚ", curDate).commit();
 	}
