@@ -4,12 +4,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.text.SimpleDateFormat;
 import java.util.zip.CRC32;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class WeightThread extends Thread {
 	private String weightStr;
@@ -103,7 +98,8 @@ public class WeightThread extends Thread {
 		byte[] weightData = new byte[20+len];
 		weightData[0] = 0x14;
 		weightData[1] = 0x43;
-		weightData[3] = 0x18;
+		weightData[2] = (byte)(20+len>>>8&0xff);
+		weightData[3] = (byte)(20+len&0xff);
 		weightData[12] = authCode[0];
 		weightData[13] = authCode[1];
 		for (int i = 0; i < len; i++) {
@@ -142,5 +138,6 @@ public class WeightThread extends Thread {
 		int fourthByte = (0x000000FF & ((int) buf[3]));
 	
 		return ( firstByte << 24 | secondByte << 16 | thirdByte << 8 | fourthByte ) & 0xFFFFFFFF; 
-	}		
+	}
+	
 }

@@ -1,5 +1,4 @@
 package com.pku.healthy;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -99,7 +98,8 @@ public class StepThread extends Thread {
 		byte[] stepData = new byte[20+len];
 		stepData[0] = 0x14;
 		stepData[1] = 0x44;
-		stepData[3] = 0x18;
+		stepData[2] = (byte)(20+len>>>8&0xff);
+		stepData[3] = (byte)(20+len&0xff);
 		stepData[12] = authCode[0];
 		stepData[13] = authCode[1];
 		for (int i = 0; i < len; i++) {

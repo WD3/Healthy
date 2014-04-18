@@ -207,6 +207,8 @@ public class StepCounter implements SensorEventListener {
 			
 			line = date + "    " + acc[0] +"    "+ acc[1] + "    " +acc[2] + "    " + "\r\n";		
 			fos.write(line.getBytes());
+//			System.out.println("acc[0]"+acc[0]+"acc[1]"+acc[1]+"acc[2]"+acc[2]);
+
 			
 			sum += tmp - data[nextData];
 			data[nextData] = tmp;

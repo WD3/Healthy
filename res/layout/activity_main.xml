@@ -165,6 +165,15 @@
                                 android:text="0%"
                                 android:textSize="25sp" />
                         </FrameLayout>
+
+                        <ImageButton
+                            android:id="@+id/lock"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="15dp"
+                            android:background="#70CD18"
+                            android:src="@drawable/preference_lock_item" />
                     </LinearLayout>
                 </ScrollView>
             </LinearLayout>
@@ -576,46 +585,14 @@
                             </LinearLayout>
                         </FrameLayout>
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
+                        <ImageButton
+                            android:id="@+id/exit"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="20dp"
-                            android:layout_marginLeft="20dp"
-                            android:layout_marginRight="20dp"
-                            android:orientation="horizontal" >
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:layout_gravity="center" >
-
-                                <ImageButton
-                                    android:id="@+id/lock"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:layout_marginLeft="60dp"                                    
-                                    android:background="#70CD18"
-                                    android:src="@drawable/preference_lock_item" />
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:layout_gravity="center" >
-
-                                <ImageButton
-                                    android:id="@+id/exit"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:layout_marginLeft="20dp"
-                                    android:background="#70CD18"
-                                    android:src="@drawable/preference_exit_item" />
-                            </LinearLayout>
-                        </LinearLayout>
+                            android:layout_gravity="center"
+                            android:layout_marginTop="15dp"
+                            android:background="#70CD18"
+                            android:src="@drawable/preference_exit_item" />
                     </LinearLayout>
                 </ScrollView>
             </LinearLayout>

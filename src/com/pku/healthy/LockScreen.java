@@ -13,7 +13,6 @@ public class LockScreen {
 	}
 	public void acquireWakeLock(){
 		if(wakeLock == null){
-			System.out.println("Acquiring wake lock");
 			PowerManager pm = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
 			wakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "tag");
 		}

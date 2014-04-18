@@ -24,7 +24,7 @@ public class HourStepsHistory {
 	private Context context;
 	private GraphicalView mchartView_day;
 
-	private String[] xhour = new String[]{"0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23"};
+	private String[] xhour = new String[]{"1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24"};
 	
 	public HourStepsHistory(LinearLayout layout,SharedPreferences sp,Context context){
 		this.layout = layout;
@@ -45,7 +45,7 @@ public class HourStepsHistory {
 		
 		double[] doubleValues = new double[24];
 		for(int i = 0; i<24; i++){
-			doubleValues[i] = sp.getInt(i+"hoursteps",0);
+			doubleValues[i] = sp.getInt(i+1+"hoursteps",0);
 		}		
 		CategorySeries series = new CategorySeries("");
 		for (int i = 0; i < doubleValues.length; i ++){		

@@ -81,27 +81,14 @@ public class MainActivity extends TabActivity implements OnClickListener {
 		tabHost = getTabHost();
 		// tabHost.setup();
 		// 新建一个newTabSpec,设置标签和图标(setIndicator),设置内容(setContent)
-		tabHost.addTab(tabHost
-				.newTabSpec("count")
-				.setIndicator("",
-						getResources().getDrawable(R.drawable.icon_count))
-				.setContent(R.id.count));
-		tabHost.addTab(tabHost
-				.newTabSpec("weight")
-				.setIndicator("",
-						getResources().getDrawable(R.drawable.icon_scale))
-				.setContent(R.id.weight));
-		tabHost.addTab(tabHost
-				.newTabSpec("history")
-				.setIndicator("",
-						getResources().getDrawable(R.drawable.icon_history))
-				.setContent(R.id.history));
-		tabHost.addTab(tabHost
-				.newTabSpec("more")
-				.setIndicator("",
-						getResources().getDrawable(R.drawable.icon_more))
-				.setContent(R.id.more));
+		tabHost.addTab(tabHost.newTabSpec("count").setIndicator("",getResources().getDrawable(R.drawable.icon_count)).setContent(R.id.count));
+		tabHost.addTab(tabHost.newTabSpec("weight").setIndicator("",getResources().getDrawable(R.drawable.icon_scale)).setContent(R.id.weight));
+		tabHost.addTab(tabHost.newTabSpec("history").setIndicator("",getResources().getDrawable(R.drawable.icon_history)).setContent(R.id.history));
+		tabHost.addTab(tabHost.newTabSpec("more").setIndicator("",getResources().getDrawable(R.drawable.icon_more)).setContent(R.id.more));
 
+		// 设置当前现实哪一个标签
+		tabHost.setCurrentTab(0); // 0为标签ID
+		
 		tvSteps = (TextView) findViewById(R.id.tv_steps);
 		distance = (TextView) findViewById(R.id.tv_distance);
 		calorie = (TextView) findViewById(R.id.tv_calorie);
@@ -252,13 +239,12 @@ public class MainActivity extends TabActivity implements OnClickListener {
 	public void onResume() {
 		super.onResume();
 		lockScreen.acquireWakeLock();
-		// 设置当前现实哪一个标签
-		tabHost.setCurrentTab(0); // 0为标签ID
+		if(tabHost.getCurrentTab() == 1)
+			saveWeight.start();
 	}
 
 	public void onPause() {
 		super.onPause();
-		System.out.println("onStop");
 		notification.show();
 		saveWeight.stop();
 		lockScreen.releaseWakeLock();

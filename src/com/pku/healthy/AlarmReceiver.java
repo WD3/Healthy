@@ -13,7 +13,6 @@ import android.content.Context;
 import android.content.Intent;
 
 public class AlarmReceiver extends BroadcastReceiver {
-	private AlarmThread alarmThread;
 	private int curHourSteps;
 	private int curSteps;
 	static String stepsString;
@@ -26,15 +25,32 @@ public class AlarmReceiver extends BroadcastReceiver {
 			System.out.println("收到广播");
 			Date date = new Date();
 			int hour = date.getHours();
-			int orgSteps = MainActivity.sp.getInt(hour+"fhoursteps", 0);
+			if(hour == 0){       //若为零点，保存上一天步数，计步清零
+				hour = 24;
+				SimpleDateFormat format = new SimpleDateFormat("MM-dd");
+				String curDate = format.format(new Date());
+				MainActivity.sp.edit().putString("日期", curDate).commit();
+				date.setDate(date.getDate() - 1);
+				String orgDate = format.format(date);
+				MainActivity.sp.edit().putString(orgDate, StepCounter.tvsteps).commit();	
+				
+				StepCounter.steps = 0;
+				StepCounter.tvsteps = "0";
+				StepCounter.distance = "0";
+				StepCounter.calorie = "0";
+				StepCounter.progress = "0%";
+				MainActivity.SendMessage(MainActivity.handler, 1);
+				for(int i = 1;i<25;i++){
+					MainActivity.sp.edit().putInt(i+"hoursteps", 0)
+					.putInt(i+"fhoursteps", 0).commit();
+				}				
+			}
+	
+			int orgSteps = MainActivity.sp.getInt(hour-1+"fhoursteps", 0);
 			curHourSteps = Integer.parseInt(StepCounter.tvsteps) - orgSteps;
 			curSteps = Integer.parseInt(StepCounter.tvsteps);
 			MainActivity.sp.edit().putInt(hour+"hoursteps", curHourSteps)
-			.putInt(hour+1+"fhoursteps", curSteps).commit();
-			if(hour == 23){				
-				alarmThread = new AlarmThread(context);
-				new Thread(alarmThread).start();	
-			}		
+			.putInt(hour+"fhoursteps", curSteps).commit();	
 			
 			saveSteps();			
 			stepsString = MainActivity.sp.getString("steps_lose", null);
@@ -49,8 +65,9 @@ public class AlarmReceiver extends BroadcastReceiver {
 		newValue = new JSONObject();
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH");
 		String time = format.format(System.currentTimeMillis());
+		String formatTime = time+":00";
 		try {
-			newValue.put("time", time);
+			newValue.put("time", formatTime);
 			newValue.put("hoursteps", curHourSteps);		
 			newValue.put("steps", curSteps);
 		} catch (JSONException e) {
