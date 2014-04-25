@@ -17,18 +17,18 @@ import android.hardware.SensorEventListener;
 public class StepCounter implements SensorEventListener {
 	
 	private float acc[] = null;
-	private File 				txtFile;
+	private static File 				txtFile;
 	private File				txtResult;
-	private File				txtDir;
-	private FileOutputStream 	fos;
+	private static File				txtDir;
+	private static FileOutputStream 	fos;
 	private FileOutputStream 	fos1;
-	private String line = "";
+	private static String line = "";
 	private long timeLast;
 	private long timeZero;
 	private long timePress;
 	private int freq = 20;
 	private int dt = 1000 / freq;
-	private int total = 10000;
+//	private int total = 10000;
 	static int count = -1;
 	private boolean recording = false;
 	private boolean dateChanged;
@@ -75,40 +75,14 @@ public class StepCounter implements SensorEventListener {
 		String curDate = format.format(new Date());
 		if(curDate.equals(orgDate))
 			steps = iOrgSteps/2;
-		else steps = 0;
-			
+		else steps = 0;			
 		
     	count = 0;
     	recording = false;
     			
 		timeLast = System.currentTimeMillis();
-		timePress = timeLast;
-		
-		SimpleDateFormat  formatter   =   new   SimpleDateFormat("yyyy-MM-dd HH-mm-ss");    
-		String fileName = formatter.format(new Date(timePress));
-		
-		try {
-			
-			txtDir = new File(Environment.getExternalStorageDirectory().getPath()+"/0SENSOR_DATA");
-			if (!txtDir.exists())
-				txtDir.mkdirs();
-			
-			txtFile = new File(Environment.getExternalStorageDirectory().getPath()+"/0SENSOR_DATA/"+ fileName + " originaldata.txt");
-			if (!txtFile.exists())
-				txtFile.createNewFile();
-			fos = new FileOutputStream(txtFile);
-			line = "version:1.0"+"\r\n"+ "手机型号:"+android.os.Build.MODEL+"\r\n"+"姓名:"+" "+"\r\n"+"身高:"+"  "+"\r\n"+"体重:"+"  "+"\r\n"+"年龄:"+"  "+"\r\n"+
-					"       "+"time"+"        "+"        "+"a[x]"+"  "+"        "+"a[y]"+"  "+"        "+"a[z]"+"\r\n";
-			fos.write(line.getBytes());
-			
-			/*txtResult = new File(Environment.getExternalStorageDirectory().getPath()+"/0SENSOR_DATA/"+ fileName + "-result.txt");
-			if (!txtResult.exists())
-				txtResult.createNewFile();
-			fos1 = new FileOutputStream(txtResult);*/
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		timePress = timeLast;	
+		WriteToFile();
 //		tvsteps = "0";
 //		MainActivity.SendMessage(MainActivity.handler, 1);
 //		wakeLock.acquire();
@@ -135,18 +109,39 @@ public class StepCounter implements SensorEventListener {
 		sum = 0;
 
 	}
-	
-	public void stop() {
+	public static void WriteToFile(){
+		SimpleDateFormat  formatter   =   new   SimpleDateFormat("yyyy-MM-dd HH-mm-ss");    
+		String fileName = formatter.format(new Date());
 		
-    	try {
-    		
-			fos.close();
-	//		fos1.close();
+		try {
+			txtDir = new File(Environment.getExternalStorageDirectory().getPath()+"/0SENSOR_DATA");
+			if (!txtDir.exists())
+				txtDir.mkdirs();
 			
+			txtFile = new File(Environment.getExternalStorageDirectory().getPath()+"/0SENSOR_DATA"+"/" + fileName + "-originaldata.txt");
+			if (!txtFile.exists())
+				txtFile.createNewFile();
+			fos = new FileOutputStream(txtFile);
+			line = "version:1.0"+"\r\n"+ "手机型号:"+android.os.Build.MODEL+"\r\n"+"姓名:"+" "+"\r\n"+"身高:"+"  "+"\r\n"+"体重:"+"  "+"\r\n"+"年龄:"+"  "+"\r\n"+
+					"       "+"time"+"        "+"        "+"a[x]"+"  "+"        "+"a[y]"+"  "+"        "+"a[z]"+"\r\n";
+			fos.write(line.getBytes());
+			
+			/*txtResult = new File(Environment.getExternalStorageDirectory().getPath()+"/0SENSOR_DATA/"+ fileName + "-result.txt");
+			if (!txtResult.exists())
+				txtResult.createNewFile();
+			fos1 = new FileOutputStream(txtResult);*/
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+	}
+	public static void stop() {		    		
+		try {
+			fos.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
        
 	public void onSensorChanged(SensorEvent event) {
@@ -173,13 +168,13 @@ public class StepCounter implements SensorEventListener {
 		if (time - timeLast < dt)  //ignore data between sampling points 
 			return;
 		
-		if (++count > total){ 
-			stop();
-			recording = false;
-//			Vibrator vib = (Vibrator) getSystemService(Service.VIBRATOR_SERVICE);
-//			vib.vibrate(5000);   //  vibrate when stop
-			return;
-		}
+//		if (++count > total){ 
+//			stop();
+//			recording = false;
+////			Vibrator vib = (Vibrator) getSystemService(Service.VIBRATOR_SERVICE);
+////			vib.vibrate(5000);   //  vibrate when stop
+//			return;
+//		}
 		
 
 		
@@ -196,8 +191,7 @@ public class StepCounter implements SensorEventListener {
 	
 	private void countSteps() {
 
-		try {
-			
+		try {			
 			tmp = Math.sqrt(acc[0] * acc[0] + acc[1] * acc[1] + acc[2] * acc[2]);
 			timeTmp = time - timeZero; 
 			
@@ -319,8 +313,7 @@ public class StepCounter implements SensorEventListener {
 				calorie = String.format("%.2f", steps * 1.23);
 				progress = String.format("%.3f", steps * 200 / Double.parseDouble(MainActivity.tarSteps)) + "%";
 				MainActivity.SendMessage(MainActivity.handler, 1);				
-				return;
-				
+				return;				
 			}
 		
 		} catch (IOException e) {

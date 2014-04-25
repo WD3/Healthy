@@ -14,6 +14,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -43,9 +45,13 @@ public class MainActivity extends TabActivity implements OnClickListener {
 	private TextView tv_tarSteps;
 	private TextView tv_tarWeight;
 	private TextView tv_BMI;
+	static TextView counterId;
+	static TextView scaleId;
 	private EditText et_tarSteps;
 	private EditText et_tarWeight;
 	private EditText et_height;
+//	static EditText counterId;
+//	static EditText scaleId;
 	private ImageButton bt_exit;
 	private ImageButton bt_lock;
 	private ImageView iv_mySwitch;
@@ -53,6 +59,8 @@ public class MainActivity extends TabActivity implements OnClickListener {
 	static String height;
 	static String tarWeight;
 	static String newWeight = "0";
+	private String BMI;
+	private String imsi;
 	private boolean hourSteps;
 	private boolean daySteps;
 	private boolean dayWeight;
@@ -93,11 +101,15 @@ public class MainActivity extends TabActivity implements OnClickListener {
 		distance = (TextView) findViewById(R.id.tv_distance);
 		calorie = (TextView) findViewById(R.id.tv_calorie);
 		progress = (TextView) findViewById(R.id.tv_progress);
+		counterId = (TextView) findViewById(R.id.counterId);
+		scaleId = (TextView) findViewById(R.id.scaleId);
 		layout = (LinearLayout) findViewById(R.id.chart);
 		bmilayout = (FrameLayout) findViewById(R.id.bmilayout);
 		et_tarSteps = (EditText) findViewById(R.id.et_tarsteps);
 		et_tarWeight = (EditText) findViewById(R.id.et_tarweight);
 		et_height = (EditText) findViewById(R.id.et_height);
+//		counterId = (EditText) findViewById(R.id.counterId);
+//		scaleId = (EditText) findViewById(R.id.scaleId);
 		tv_tarSteps = (TextView) findViewById(R.id.tv_tarsteps);
 		tv_tarWeight = (TextView) findViewById(R.id.tv_tarWeight);
 		tv_BMI = (TextView) findViewById(R.id.tv_bmi);
@@ -110,6 +122,9 @@ public class MainActivity extends TabActivity implements OnClickListener {
 
 		sp = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
 		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
+		TelephonyManager mTelephonyMgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+		imsi = mTelephonyMgr.getSubscriberId();
+//		imsi = "460010604602195";
 
 		dayStepsHistory = new DayStepsHistory(layout, sp, this);
 		hourStepsHistory = new HourStepsHistory(layout, sp, this);
@@ -135,6 +150,10 @@ public class MainActivity extends TabActivity implements OnClickListener {
 					initWheel(R.id.passw_3, c);
 					initWheel(R.id.passw_4, d);
 					tv_tarWeight.setText(et_tarWeight.getText().toString());
+					BMI = sp.getString("BMI", "0");
+					tv_BMI.setText(BMI);
+					double bmi = Double.parseDouble(BMI);
+					displayBMI(bmi);
 					saveWeight.start();
 					// sensorManager.registerListener(shakeListenerUtils,sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),SensorManager.SENSOR_DELAY_NORMAL);
 				} else if (tabId.equals("history")) {
@@ -151,6 +170,9 @@ public class MainActivity extends TabActivity implements OnClickListener {
 				} else if (tabId.equals("more")) {
 					setActivity.read();
 					saveWeight.stop();
+					counterId.setText(imsi.replaceFirst("460", "0000"));
+					scaleId.setText(imsi.replaceFirst("460", "0100"));
+//					counterId.setText(text);
 					// sensorManager.unregisterListener(shakeListenerUtils);
 				}
 			}
@@ -168,6 +190,7 @@ public class MainActivity extends TabActivity implements OnClickListener {
 		tarWeight = "" + et_tarWeight.getText();
 	}
 
+	
 	// Wheel scrolled listener
 	OnWheelScrollListener scrolledListener = new OnWheelScrollListener() {
 		public void onScrollingStarted(WheelView wheel) {
@@ -185,19 +208,24 @@ public class MainActivity extends TabActivity implements OnClickListener {
 			double height = Double.parseDouble(et_height.getText().toString());
 			double bmi = Double.parseDouble(newWeight)
 					/ (height * height / 10000);
-			tv_BMI.setText(String.format("%.2f", bmi));
-			if (bmi < 18.5 || bmi > 32)
-				bmilayout.setBackgroundColor(Color.parseColor("#FF0000"));
-			else if (bmi >= 18.5 && bmi <= 24.99)
-				bmilayout.setBackgroundColor(Color.parseColor("#CCFF33"));
-			else if (bmi > 25 && bmi <= 28)
-				bmilayout.setBackgroundColor(Color.parseColor("#FFFF66"));
-			else if (bmi > 28 && bmi <= 32)
-				bmilayout.setBackgroundColor(Color.parseColor("#FF9900"));
-			if (bmi >= 20 && bmi <= 25)
-				bmilayout.setBackgroundColor(Color.parseColor("#00CC00"));
+			BMI = String.format("%.2f", bmi);
+			sp.edit().putString("BMI", BMI).commit();
+			tv_BMI.setText(BMI);
+			displayBMI(bmi);			
 		}
 	};
+	private void displayBMI(double bmi){		
+		if (bmi < 18.5 || bmi > 32)
+			bmilayout.setBackgroundColor(Color.parseColor("#FF0000"));
+		else if (bmi >= 18.5 && bmi <= 24.99)
+			bmilayout.setBackgroundColor(Color.parseColor("#CCFF33"));
+		else if (bmi > 25 && bmi <= 28)
+			bmilayout.setBackgroundColor(Color.parseColor("#FFFF66"));
+		else if (bmi > 28 && bmi <= 32)
+			bmilayout.setBackgroundColor(Color.parseColor("#FF9900"));
+		if (bmi >= 20 && bmi <= 25)
+			bmilayout.setBackgroundColor(Color.parseColor("#00CC00"));
+	}
 
 	// Wheel changed listener
 	private OnWheelChangedListener changedListener = new OnWheelChangedListener() {

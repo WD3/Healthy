@@ -412,6 +412,77 @@
 
                         <FrameLayout
                             android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginTop="20dp"
+                            android:background="@drawable/background_grey" >
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="left"
+                                android:layout_marginLeft="15dp"
+                                android:layout_marginTop="8dp"
+                                android:text="计步器："
+                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                android:textColor="#FFFFFF" />
+
+                            <TextView
+                                android:id="@+id/counterId"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                 android:layout_marginTop="7dp"
+                                android:layout_marginRight="15dp"
+                                android:textSize="18sp"
+                                android:layout_gravity="right" />
+                            <!-- <EditText
+                                android:id="@+id/counterId"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="right"
+                                android:background="@null"
+                                android:ems="10"
+                                android:inputType="numberDecimal" /> -->
+                        </FrameLayout>
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:background="@drawable/layout_brown" >
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="left"
+                                android:layout_marginLeft="15dp"
+                                android:layout_marginTop="8dp"
+                                android:text="体重计："
+                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                android:textColor="#2F2F2F" />
+                            <TextView
+                                android:id="@+id/scaleId"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="7dp"
+                                android:layout_marginRight="15dp"
+                                android:textSize="18sp"
+                                android:layout_gravity="right" />
+
+                           <!--  <EditText
+                                android:id="@+id/scaleId"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="right"
+                                android:background="@null"
+                                android:ems="10"
+                                android:inputType="numberDecimal" /> -->
+                        </FrameLayout>
+                        <!--
+                             <FrameLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
                             android:layout_marginRight="20dp"
@@ -434,17 +505,29 @@
                                         android:layout_gravity="left"
                                         android:layout_marginLeft="15dp"
                                         android:layout_marginTop="10dp"
-                                        android:text="计步器序列号："
+                                        android:text="计步器："
                                         android:textAppearance="?android:attr/textAppearanceMedium"
                                         android:textColor="#FFFFFF" />
 
-                                    <TextView
+                                    <EditText
+                                        android:id="@+id/counterId"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="right"
+                                        android:background="@null" 
+                                        android:ems="10"
+                                        android:inputType="numberDecimal" />
+
+                                    
+                                   android:background="@drawable/background_grey" 
+                                         <TextView
                                         android:id="@+id/counterId"
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         android:layout_gravity="right"
                                         android:layout_marginRight="15dp"
                                         android:layout_marginTop="15dp" />
+                                   
                                 </FrameLayout>
 
                                 <TextView
@@ -453,19 +536,32 @@
                                     android:layout_gravity="left"
                                     android:layout_marginLeft="15dp"
                                     android:layout_marginTop="5dp"
-                                    android:text="体重计序列号："
+                                    android:text="体重计："
                                     android:textAppearance="?android:attr/textAppearanceMedium"
                                     android:textColor="#2F2F2F" />
 
-                                <TextView
+                                <EditText
+                                    android:id="@+id/scaleId"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_gravity="right"
+                                    android:background="@null" 
+                                    android:ems="10"
+                                    android:inputType="numberDecimal" />
+
+                                
+                                 android:background="@drawable/button_transparent"
+                                     <TextView
                                     android:id="@+id/scaleId"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:layout_gravity="right"
                                     android:layout_marginRight="15dp"
                                     android:background="@drawable/button_transparent" />
+                               
                             </LinearLayout>
                         </FrameLayout>
+                        -->
 
                         <FrameLayout
                             android:layout_width="match_parent"

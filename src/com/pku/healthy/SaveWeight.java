@@ -46,7 +46,9 @@ public class SaveWeight {
 					if(weightString == null) formatWeight();
 					else saveLoseWeight();
 					System.out.println("weightString"+weightString);
-					WeightThread wThread = new WeightThread(weightString, "000000000000");
+					String weightId = MainActivity.scaleId.getText().toString();
+//					String weightId = "000000000000";
+					WeightThread wThread = new WeightThread(weightString, weightId);
 					wThread.start();
 				}
 			}      	

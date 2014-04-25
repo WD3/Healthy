@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Environment;
 
 public class AlarmReceiver extends BroadcastReceiver {
 	private int curHourSteps;
@@ -52,12 +53,25 @@ public class AlarmReceiver extends BroadcastReceiver {
 			MainActivity.sp.edit().putInt(hour+"hoursteps", curHourSteps)
 			.putInt(hour+"fhoursteps", curSteps).commit();	
 			
+			StepCounter.stop();
+			String sourceFilePath = Environment.getExternalStorageDirectory().getPath()+"/0SENSOR_DATA";
+			String zipFilePath = Environment.getExternalStorageDirectory().getPath()+"/0SENSOR_DATA";
+			boolean flag = FileToZip.fileToZip(sourceFilePath, zipFilePath);
+			if (flag) {
+				System.out.println(">>>>>> 文件打包成功. <<<<<<");
+			} else {
+				System.out.println(">>>>>> 文件打包失败. <<<<<<");
+			}
+			StepCounter.WriteToFile();
+			
 			saveSteps();			
 			stepsString = MainActivity.sp.getString("steps_lose", null);
 			if(stepsString == null) formatSteps();
 			else saveLoseSteps();
 			System.out.println("StepsString"+stepsString);
-			StepThread sThread = new StepThread(stepsString, "000000000000");
+			String countId = MainActivity.counterId.getText().toString();
+//			String countId = "000000000000";
+			StepThread sThread = new StepThread(stepsString, countId);
 			sThread.start();							
 		}		
 	}
