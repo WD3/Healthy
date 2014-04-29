@@ -54,24 +54,31 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int locka=0x7f020012;
         public static final int preference_exit_item=0x7f020013;
         public static final int preference_lock_item=0x7f020014;
-        public static final int preference_switch_item=0x7f020015;
-        public static final int scroll_bar=0x7f020016;
-        public static final int scroll_bar_control=0x7f020017;
-        public static final int switch_normal=0x7f020018;
-        public static final int switch_pressed=0x7f020019;
-        public static final int wheel_bg=0x7f02001a;
-        public static final int wheel_val=0x7f02001b;
+        public static final int preference_register_item=0x7f020015;
+        public static final int preference_switch_item=0x7f020016;
+        public static final int register_normal=0x7f020017;
+        public static final int register_pressed=0x7f020018;
+        public static final int scroll_bar=0x7f020019;
+        public static final int scroll_bar_control=0x7f02001a;
+        public static final int switch_normal=0x7f02001b;
+        public static final int switch_pressed=0x7f02001c;
+        public static final int wheel_bg=0x7f02001d;
+        public static final int wheel_val=0x7f02001e;
     }
     public static final class id {
-        public static final int action_settings=0x7f09001a;
+        public static final int action_settings=0x7f090029;
+        public static final int age=0x7f090024;
         public static final int bmilayout=0x7f09000c;
         public static final int chart=0x7f090011;
         public static final int count=0x7f090000;
-        public static final int counterId=0x7f090013;
-        public static final int et_height=0x7f090017;
-        public static final int et_tarsteps=0x7f090016;
-        public static final int et_tarweight=0x7f090015;
-        public static final int exit=0x7f090018;
+        public static final int counterId=0x7f090014;
+        public static final int email=0x7f090027;
+        public static final int et_height=0x7f090018;
+        public static final int et_tarsteps=0x7f090017;
+        public static final int et_tarweight=0x7f090016;
+        public static final int exit=0x7f090019;
+        public static final int forgetPw=0x7f09001f;
+        public static final int gender=0x7f090025;
         public static final int history=0x7f09000f;
         public static final int lock=0x7f090006;
         public static final int more=0x7f090012;
@@ -80,15 +87,26 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int passw_2=0x7f090009;
         public static final int passw_3=0x7f09000a;
         public static final int passw_4=0x7f09000b;
-        public static final int scaleId=0x7f090014;
+        public static final int password=0x7f090020;
+        public static final int register=0x7f090013;
+        public static final int registerLayout=0x7f09001b;
+        public static final int repeatPw=0x7f090022;
+        public static final int scaleId=0x7f090015;
+        public static final int tel=0x7f090028;
+        public static final int tv_age=0x7f090023;
         public static final int tv_bmi=0x7f09000d;
         public static final int tv_calorie=0x7f090003;
         public static final int tv_distance=0x7f090002;
+        public static final int tv_email=0x7f090026;
+        public static final int tv_password=0x7f09001e;
         public static final int tv_progress=0x7f090005;
+        public static final int tv_repeatPw=0x7f090021;
         public static final int tv_steps=0x7f090001;
         public static final int tv_tarWeight=0x7f09000e;
         public static final int tv_tarsteps=0x7f090004;
-        public static final int unlock=0x7f090019;
+        public static final int tv_userName=0x7f09001c;
+        public static final int unlock=0x7f09001a;
+        public static final int userName=0x7f09001d;
         public static final int weight=0x7f090007;
     }
     public static final class layout {
@@ -100,6 +118,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int arrays=0x7f080000;
         public static final int lock_screen=0x7f080001;
         public static final int main=0x7f080002;
+        public static final int register=0x7f080003;
     }
     public static final class string {
         public static final int action_settings=0x7f060001;
@@ -109,6 +128,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int hello_world=0x7f060002;
         public static final int title_activity_lock_screen=0x7f060006;
         public static final int title_activity_lockscreen=0x7f060003;
+        public static final int title_activity_register=0x7f060007;
     }
     public static final class style {
         /** 

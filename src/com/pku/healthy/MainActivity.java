@@ -55,6 +55,7 @@ public class MainActivity extends TabActivity implements OnClickListener {
 	private ImageButton bt_exit;
 	private ImageButton bt_lock;
 	private ImageView iv_mySwitch;
+	private ImageView iv_register;
 	static String tarSteps;
 	static String height;
 	static String tarWeight;
@@ -114,7 +115,9 @@ public class MainActivity extends TabActivity implements OnClickListener {
 		tv_tarWeight = (TextView) findViewById(R.id.tv_tarWeight);
 		tv_BMI = (TextView) findViewById(R.id.tv_bmi);
 		iv_mySwitch = (ImageView) findViewById(R.id.myswitch);
-		iv_mySwitch.setOnClickListener(this);
+		iv_mySwitch.setOnClickListener(this);		
+		iv_register = (ImageView) findViewById(R.id.register);
+		iv_register.setOnClickListener(this);
 		bt_exit = (ImageButton) findViewById(R.id.exit);
 		bt_exit.setOnClickListener(this);
 		bt_lock = (ImageButton) findViewById(R.id.lock);
@@ -314,6 +317,9 @@ public class MainActivity extends TabActivity implements OnClickListener {
 			Intent i = new Intent(MainActivity.this, LockScreenActivity.class);
 			MainActivity.this.startActivity(i);
 			break;
+		case R.id.register:
+			Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
+			MainActivity.this.startActivity(intent);
 		case R.id.myswitch:
 			if (hourSteps) {
 				hourSteps = false;
