@@ -30,10 +30,10 @@ public class AlarmReceiver extends BroadcastReceiver {
 				hour = 24;
 				SimpleDateFormat format = new SimpleDateFormat("MM-dd");
 				String curDate = format.format(new Date());
-				MainActivity.sp.edit().putString("日期", curDate).commit();
+				PlayService.sp.edit().putString("日期", curDate).commit();
 				date.setDate(date.getDate() - 1);
 				String orgDate = format.format(date);
-				MainActivity.sp.edit().putString(orgDate, StepCounter.tvsteps).commit();	
+				PlayService.sp.edit().putString(orgDate, StepCounter.tvsteps).commit();	
 				
 				StepCounter.steps = 0;
 				StepCounter.tvsteps = "0";
@@ -42,15 +42,15 @@ public class AlarmReceiver extends BroadcastReceiver {
 				StepCounter.progress = "0%";
 				MainActivity.SendMessage(MainActivity.handler, 1);
 				for(int i = 1;i<25;i++){
-					MainActivity.sp.edit().putInt(i+"hoursteps", 0)
+					PlayService.sp.edit().putInt(i+"hoursteps", 0)
 					.putInt(i+"fhoursteps", 0).commit();
 				}				
 			}
 	
-			int orgSteps = MainActivity.sp.getInt(hour-1+"fhoursteps", 0);
+			int orgSteps = PlayService.sp.getInt(hour-1+"fhoursteps", 0);
 			curHourSteps = Integer.parseInt(StepCounter.tvsteps) - orgSteps;
 			curSteps = Integer.parseInt(StepCounter.tvsteps);
-			MainActivity.sp.edit().putInt(hour+"hoursteps", curHourSteps)
+			PlayService.sp.edit().putInt(hour+"hoursteps", curHourSteps)
 			.putInt(hour+"fhoursteps", curSteps).commit();	
 			
 			StepCounter.stop();
@@ -65,7 +65,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 			StepCounter.WriteToFile();
 			
 			saveSteps();			
-			stepsString = MainActivity.sp.getString("steps_lose", null);
+			stepsString = PlayService.sp.getString("steps_lose", null);
 			if(stepsString == null) formatSteps();
 			else saveLoseSteps();
 			System.out.println("StepsString"+stepsString);
@@ -96,12 +96,12 @@ public class AlarmReceiver extends BroadcastReceiver {
 	}
 	public static void saveLoseSteps(){
 		JSONArray stepsJSONArray;
-		stepsString = MainActivity.sp.getString("steps_lose", "[]");
+		stepsString = PlayService.sp.getString("steps_lose", "[]");
 		try {
 			stepsJSONArray = new JSONArray(stepsString);
 			stepsJSONArray.put(newValue);
 			stepsString = stepsJSONArray.toString();
-			MainActivity.sp.edit().putString("Steps_lose", stepsString)
+			PlayService.sp.edit().putString("Steps_lose", stepsString)
 					.commit();
 			System.out.println("保存上传失败步数成功");
 		} catch (JSONException e) {

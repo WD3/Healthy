@@ -80,7 +80,7 @@ public class BluetoothManager {
 
 		Log.e("Ğ´ÈëÄÚ²¿hash", name + address);
 		find_address = address;
-		MainActivity.sp.edit().putString("find_address", find_address).commit();
+		PlayService.sp.edit().putString("find_address", find_address).commit();
 		// hashmap.put(address, name);
 	}
 

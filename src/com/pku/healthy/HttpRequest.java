@@ -1,5 +1,8 @@
 package com.pku.healthy;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -12,19 +15,12 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.xmlpull.v1.XmlPullParser;
+import android.util.Log;
 
-import android.util.Xml;
 
 
 public class HttpRequest {
-
+	static String reply;
 	
 	public static boolean sendXML(String path, String xml)throws Exception{
 		byte[] data = xml.getBytes();
@@ -43,6 +39,17 @@ public class HttpRequest {
 			return true;
 		}
 		return false;
+	}
+	
+	public static byte[] getGetRequest(String path) throws Exception {
+		// TODO Auto-generated method stub
+		URL url = new URL(path);
+		HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+		conn.setRequestMethod("GET");
+		conn.setConnectTimeout(5000);
+		InputStream inStream = conn.getInputStream();
+		byte[] data = readInputStream(inStream);
+		return data;		
 	}
 
 	public static boolean sendGetRequest(String path, Map<String, String> params, String enc) throws Exception{
@@ -80,9 +87,9 @@ public class HttpRequest {
 		HttpURLConnection conn = (HttpURLConnection)url.openConnection();
 		conn.setRequestMethod("POST");
 		conn.setConnectTimeout(5 * 1000);
+		conn.setUseCaches(false);
 		conn.setDoOutput(true);//如果通过post提交数据，必须设置允许对外输出数据
-		//Content-Type: application/x-www-form-urlencoded
-		//Content-Length: 38
+
 		conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 		conn.setRequestProperty("Content-Length", String.valueOf(entitydata.length));
 		OutputStream outStream = conn.getOutputStream();
@@ -90,12 +97,19 @@ public class HttpRequest {
 		outStream.flush();
 		outStream.close();
 		if(conn.getResponseCode()==200){
+			HttpURLConnection conn1 = (HttpURLConnection)url.openConnection();
+			conn1.setRequestMethod("GET");
+			conn1.setConnectTimeout(5000);
+			InputStream inStream = conn.getInputStream();
+			byte[] data = readInputStream(inStream);
+			reply = new String(data);
+			System.out.println("reply"+reply);
 			return true;
 		}
 		return false;
 	}
 	
-	//SSL HTTPS Cookie
+/*	//SSL HTTPS Cookie
 	public static boolean sendRequestFromHttpClient(String path, Map<String, String> params, String enc) throws Exception{
 		List<NameValuePair> paramPairs = new ArrayList<NameValuePair>();
 		if(params!=null && !params.isEmpty()){
@@ -112,5 +126,15 @@ public class HttpRequest {
 			return true;
 		}
 		return false;
+	}*/
+	private static byte[] readInputStream(InputStream inStream) throws Exception{
+		ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+		byte[] buffer = new byte[1024];
+		int len = 0;
+		while( (len=inStream.read(buffer)) != -1 ){
+			outStream.write(buffer, 0, len);
+		}
+		inStream.close();
+		return outStream.toByteArray();
 	}
 }

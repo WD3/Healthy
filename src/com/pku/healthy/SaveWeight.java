@@ -42,12 +42,12 @@ public class SaveWeight {
 					saveWeight();
 					SaveWeightThread sWThread = new SaveWeightThread();
 					sWThread.start();
-					weightString = MainActivity.sp.getString("weight_lose", null);
+					weightString = PlayService.sp.getString("weight_lose", null);
 					if(weightString == null) formatWeight();
 					else saveLoseWeight();
 					System.out.println("weightString"+weightString);
 					String weightId = MainActivity.scaleId.getText().toString();
-//					String weightId = "000000000000";
+					System.out.println("weightId"+weightId);
 					WeightThread wThread = new WeightThread(weightString, weightId);
 					wThread.start();
 				}
@@ -76,12 +76,12 @@ public class SaveWeight {
 	}
 	public static void saveLoseWeight(){
 		JSONArray weightJSONArray;
-		weightString = MainActivity.sp.getString("weight_lose", "[]");
+		weightString = PlayService.sp.getString("weight_lose", "[]");
 		try {
 			weightJSONArray = new JSONArray(weightString);
 			weightJSONArray.put(newValue);
 			weightString = weightJSONArray.toString();
-			MainActivity.sp.edit().putString("weight_lose", weightString)
+			PlayService.sp.edit().putString("weight_lose", weightString)
 					.commit();
 			System.out.println("保存上传失败体重成功");
 		} catch (JSONException e) {

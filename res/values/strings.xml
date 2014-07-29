@@ -9,5 +9,6 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="title_activity_lock_screen">LockScreenActivity</string>
     <string name="title_activity_register">RegisterActivity</string>
+    <string name="title_activity_about">AboutActivity</string>
 
 </resources>

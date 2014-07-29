@@ -1,10 +1,14 @@
 package com.pku.healthy;
 
+
+import java.util.HashMap;
+import java.util.Map;
 import kankan.wheel.widget.OnWheelChangedListener;
 import kankan.wheel.widget.OnWheelScrollListener;
 import kankan.wheel.widget.WheelView;
 import kankan.wheel.widget.adapters.NumericWheelAdapter;
 import android.app.TabActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -38,6 +42,7 @@ public class MainActivity extends TabActivity implements OnClickListener {
 	static TabHost tabHost;
 	private LinearLayout layout;
 	private FrameLayout bmilayout;
+	private FrameLayout aboutLayout;
 	static TextView tvSteps;
 	static TextView calorie;
 	static TextView progress;
@@ -50,23 +55,22 @@ public class MainActivity extends TabActivity implements OnClickListener {
 	private EditText et_tarSteps;
 	private EditText et_tarWeight;
 	private EditText et_height;
-//	static EditText counterId;
-//	static EditText scaleId;
-	private ImageButton bt_exit;
+//	private ImageButton bt_exit;
 	private ImageButton bt_lock;
 	private ImageView iv_mySwitch;
 	private ImageView iv_register;
 	static String tarSteps;
 	static String height;
 	static String tarWeight;
-	static String newWeight = "0";
+	static String newWeight;
 	private String BMI;
-	private String imsi;
+	static String imsi;
 	private boolean hourSteps;
 	private boolean daySteps;
 	private boolean dayWeight;
 
-	static SharedPreferences sp;
+	static Context context;
+//	static SharedPreferences sp;
 	private SensorManager sensorManager;
 
 	private DayStepsHistory dayStepsHistory;
@@ -76,7 +80,6 @@ public class MainActivity extends TabActivity implements OnClickListener {
 	private SaveWeight saveWeight;
 	private NotificationExtend notification;
 	private LockScreen lockScreen;
-	// private ShakeListenerUtils shakeListenerUtils;
 
 	private boolean wheelScrolled = false; // Wheel scrolled flag
 
@@ -106,11 +109,11 @@ public class MainActivity extends TabActivity implements OnClickListener {
 		scaleId = (TextView) findViewById(R.id.scaleId);
 		layout = (LinearLayout) findViewById(R.id.chart);
 		bmilayout = (FrameLayout) findViewById(R.id.bmilayout);
+		aboutLayout = (FrameLayout) findViewById(R.id.about);
+		aboutLayout.setOnClickListener(this);
 		et_tarSteps = (EditText) findViewById(R.id.et_tarsteps);
 		et_tarWeight = (EditText) findViewById(R.id.et_tarweight);
 		et_height = (EditText) findViewById(R.id.et_height);
-//		counterId = (EditText) findViewById(R.id.counterId);
-//		scaleId = (EditText) findViewById(R.id.scaleId);
 		tv_tarSteps = (TextView) findViewById(R.id.tv_tarsteps);
 		tv_tarWeight = (TextView) findViewById(R.id.tv_tarWeight);
 		tv_BMI = (TextView) findViewById(R.id.tv_bmi);
@@ -118,32 +121,38 @@ public class MainActivity extends TabActivity implements OnClickListener {
 		iv_mySwitch.setOnClickListener(this);		
 		iv_register = (ImageView) findViewById(R.id.register);
 		iv_register.setOnClickListener(this);
-		bt_exit = (ImageButton) findViewById(R.id.exit);
-		bt_exit.setOnClickListener(this);
+//		bt_exit = (ImageButton) findViewById(R.id.exit);
+//		bt_exit.setOnClickListener(this);
 		bt_lock = (ImageButton) findViewById(R.id.lock);
 		bt_lock.setOnClickListener(this);
 
-		sp = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+//		sp = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
 		sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
 		TelephonyManager mTelephonyMgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
 		imsi = mTelephonyMgr.getSubscriberId();
-//		imsi = "460010604602195";
-
-		dayStepsHistory = new DayStepsHistory(layout, sp, this);
-		hourStepsHistory = new HourStepsHistory(layout, sp, this);
-		dayWeightHistory = new DayWeightHistory(layout, sp, this);
-		setActivity = new SetActivity(sp, et_tarWeight, et_tarSteps, et_height);
-		saveWeight = new SaveWeight(this, sp);
+//		imsi = "460010604602555";
+		if(imsi != null){
+			counterId.setText(imsi.replaceFirst("460", "0000"));
+			scaleId.setText(imsi.replaceFirst("460", "0100"));
+		}		
+		
+		Log.e("MainActivity", "MainActivity onCreate");
+		this.startService(new Intent(this, PlayService.class));
+		PlayService.sp = PreferenceManager.getDefaultSharedPreferences(this);
+		dayStepsHistory = new DayStepsHistory(layout, PlayService.sp, this);
+		hourStepsHistory = new HourStepsHistory(layout, PlayService.sp, this);
+		dayWeightHistory = new DayWeightHistory(layout, PlayService.sp, this);
+		setActivity = new SetActivity(PlayService.sp, et_tarWeight, et_tarSteps, et_height);
+		saveWeight = new SaveWeight(this, PlayService.sp);
 		notification = new NotificationExtend(this);
 		lockScreen = new LockScreen(this);
-		// shakeListenerUtils = new ShakeListenerUtils(this,weightSp);
 
 		// 标签切换处理，用setOnTabChangedListener
 		tabHost.setOnTabChangedListener(new OnTabChangeListener() {
 			public void onTabChanged(String tabId) {
 				if (tabId.equals("weight")) {
 					setActivity.save();
-					newWeight = sp.getString("体重", "000.0");
+					newWeight = PlayService.sp.getString("体重", "000.0");
 					int a = Integer.parseInt("" + newWeight.charAt(0));
 					int b = Integer.parseInt("" + newWeight.charAt(1));
 					int c = Integer.parseInt("" + newWeight.charAt(2));
@@ -153,7 +162,7 @@ public class MainActivity extends TabActivity implements OnClickListener {
 					initWheel(R.id.passw_3, c);
 					initWheel(R.id.passw_4, d);
 					tv_tarWeight.setText(et_tarWeight.getText().toString());
-					BMI = sp.getString("BMI", "0");
+					BMI = PlayService.sp.getString("BMI", "0");
 					tv_BMI.setText(BMI);
 					double bmi = Double.parseDouble(BMI);
 					displayBMI(bmi);
@@ -173,15 +182,13 @@ public class MainActivity extends TabActivity implements OnClickListener {
 				} else if (tabId.equals("more")) {
 					setActivity.read();
 					saveWeight.stop();
-					counterId.setText(imsi.replaceFirst("460", "0000"));
-					scaleId.setText(imsi.replaceFirst("460", "0100"));
-//					counterId.setText(text);
+//					counterId.setText(imsi.replaceFirst("460", "0000"));
+//					scaleId.setText(imsi.replaceFirst("460", "0100"));
 					// sensorManager.unregisterListener(shakeListenerUtils);
 				}
 			}
 		});
-
-		this.startService(new Intent(this, PlayService.class));
+		
 		setActivity.read();
 		tvSteps.setText(StepCounter.tvsteps);
 		distance.setText(StepCounter.distance);
@@ -191,6 +198,17 @@ public class MainActivity extends TabActivity implements OnClickListener {
 		tarSteps = "" + et_tarSteps.getText();
 		height = "" + et_height.getText();
 		tarWeight = "" + et_tarWeight.getText();
+		Map<String, String> IMSIParams = new HashMap<String, String>();
+		IMSIParams.put("IMSI", imsi);
+//		int firstInstall = sp.getInt("firstInstall", 0);
+//		if(firstInstall == 0){
+			CheckIsRegistered checkIsRegistered = new CheckIsRegistered(this,IMSIParams);
+			checkIsRegistered.start();
+//			sp.edit().putInt("firstInstall", 1).commit();
+//		}		
+		CheckVersion  checkVersion = new CheckVersion(this);
+		checkVersion.start();
+		context = this;
 	}
 
 	
@@ -207,12 +225,12 @@ public class MainActivity extends TabActivity implements OnClickListener {
 			int c = getWheel(R.id.passw_3).getCurrentItem();
 			int d = getWheel(R.id.passw_4).getCurrentItem();
 			newWeight = "" + a + b + c + "." + d;
-			sp.edit().putString("体重", newWeight).commit();
+			PlayService.sp.edit().putString("体重", newWeight).commit();
 			double height = Double.parseDouble(et_height.getText().toString());
 			double bmi = Double.parseDouble(newWeight)
 					/ (height * height / 10000);
 			BMI = String.format("%.2f", bmi);
-			sp.edit().putString("BMI", BMI).commit();
+			PlayService.sp.edit().putString("BMI", BMI).commit();
 			tv_BMI.setText(BMI);
 			displayBMI(bmi);			
 		}
@@ -301,17 +319,25 @@ public class MainActivity extends TabActivity implements OnClickListener {
 				calorie.setText(StepCounter.calorie);
 				progress.setText(StepCounter.progress);
 				break;
+			case 2:
+				Toast.makeText(context, "体重上传失败，请检查您的网络连接", Toast.LENGTH_LONG).show();
+				break;
 			}
 		}
 	};
-
+	public static void exit(){
+		MainActivity.context.stopService(new Intent(MainActivity.context,PlayService.class));
+	}
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
-		case R.id.exit:
-			MainActivity.this.stopService(new Intent(MainActivity.this,
-					PlayService.class));
+//		case R.id.exit:
+//			MainActivity.this.stopService(new Intent(MainActivity.this,
+//					PlayService.class));
+//			break;
+		case R.id.about:
+			MainActivity.this.startActivity(new Intent(MainActivity.this,AboutActivity.class));
 			break;
 		case R.id.lock:
 			Intent i = new Intent(MainActivity.this, LockScreenActivity.class);
@@ -320,6 +346,7 @@ public class MainActivity extends TabActivity implements OnClickListener {
 		case R.id.register:
 			Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
 			MainActivity.this.startActivity(intent);
+			break;
 		case R.id.myswitch:
 			if (hourSteps) {
 				hourSteps = false;

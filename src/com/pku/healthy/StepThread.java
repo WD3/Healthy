@@ -32,6 +32,7 @@ public class StepThread extends Thread {
 				} else {
 					request[23-j] |= (byte)(c-'0'<<4&0xf0);
 					j++;
+					low = true;
 				}
 			} else if (c>='A'&&c<='F') {
 				if (low) {
@@ -40,6 +41,7 @@ public class StepThread extends Thread {
 				} else {
 					request[23-j] = (byte)(c-'A'+10<<4&0xf0);
 					j++;
+					low = true;
 				}
 			} else {
 				return;
@@ -127,7 +129,7 @@ public class StepThread extends Thread {
 			return;
 		}
 		AlarmReceiver.stepsString = null;
-		MainActivity.sp.edit().putString("steps_lose", null).commit();
+		PlayService.sp.edit().putString("steps_lose", null).commit();
 	}
 	
 	private int byte4toInt(byte[] buf){

@@ -32,6 +32,7 @@ public class WeightThread extends Thread {
 				} else {
 					request[23-j] |= (byte)(c-'0'<<4&0xf0);
 					j++;
+					low = true;
 				}
 			} else if (c>='A'&&c<='F') {
 				if (low) {
@@ -40,6 +41,7 @@ public class WeightThread extends Thread {
 				} else {
 					request[23-j] = (byte)(c-'A'+10<<4&0xf0);
 					j++;
+					low = true;
 				}
 			} else {
 				return;
@@ -86,11 +88,13 @@ public class WeightThread extends Thread {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			SaveWeight.saveLoseWeight();
+			MainActivity.SendMessage(MainActivity.handler, 2);
 			return;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			SaveWeight.saveLoseWeight();
+			MainActivity.SendMessage(MainActivity.handler, 2);
 			return;
 		}
 		byte[] weightByte = weightStr.getBytes();
@@ -119,15 +123,17 @@ public class WeightThread extends Thread {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			SaveWeight.saveLoseWeight();
+			MainActivity.SendMessage(MainActivity.handler, 2);
 			return;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			SaveWeight.saveLoseWeight();
+			MainActivity.SendMessage(MainActivity.handler, 2);
 			return;
 		}
 		SaveWeight.weightString = null;
-		MainActivity.sp.edit().putString("weight_lose", null).commit();
+		PlayService.sp.edit().putString("weight_lose", null).commit();
 	}
 	
 	private int byte4toInt(byte[] buf){

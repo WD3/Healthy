@@ -47,7 +47,7 @@ public class NotificationExtend {
                 
         // 设置通知的事件消息
         CharSequence contentTitle = "Healthy"; // 通知栏标题
-        CharSequence contentText ="当前步数为："+ StepCounter.tvsteps; // 通知栏内容
+        CharSequence contentText ="正在计步"; // 通知栏内容
         
         Intent notificationIntent = new Intent(context,MainActivity.class);
         notificationIntent.setAction(Intent.ACTION_MAIN);

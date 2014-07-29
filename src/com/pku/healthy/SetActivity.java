@@ -22,6 +22,7 @@ public class SetActivity {
 				.putString("目标步数", et2.getText().toString())
 				.putString("身高", et3.getText().toString()).commit();
 		MainActivity.height = et3.getText().toString();
+		MainActivity.tarSteps = et2.getText().toString();
 	}
 
 	public void read() {

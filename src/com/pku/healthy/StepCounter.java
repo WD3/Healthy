@@ -68,8 +68,8 @@ public class StepCounter implements SensorEventListener {
     
 	public void start() {
 //		再次启动程序时判断是否当天，若当天则加上之前步数
-		orgDate = MainActivity.sp.getString("日期", "");
-		sOrgSteps = MainActivity.sp.getString("步数", "0");
+		orgDate = PlayService.sp.getString("日期", "");
+		sOrgSteps = PlayService.sp.getString("步数", "0");
 		int iOrgSteps = Integer.parseInt(sOrgSteps);
 		SimpleDateFormat format = new SimpleDateFormat("MM-dd");
 		String curDate = format.format(new Date());
@@ -150,7 +150,7 @@ public class StepCounter implements SensorEventListener {
 			return;
 		
 		acc = event.values;
-//		System.out.println("acc[0]"+acc[0]+"acc[1]"+acc[1]+"acc[2]"+acc[2]);
+		System.out.println("acc[0]"+acc[0]+"acc[1]"+acc[1]+"acc[2]"+acc[2]);
 		
 		time = System.currentTimeMillis();
 		
